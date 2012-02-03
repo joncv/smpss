@@ -1,0 +1,16 @@
+{/include file="common/header.html"/}
+<p>所有分类</p>
+<div class="listtable">
+  <table width="100%">
+    <tr>
+      <td>分类名称</td>
+      <td>管理</td>
+    </tr>
+    {/section name=i loop=$category/}
+    <tr>
+      <td>{/$category[i].pre/}{/$category[i].cat_name/}</td>
+      <td><a href="{/get_url rule='/category/category' data='catid='|cat:$category[i].cat_id/}">编辑</a></td>
+    </tr>
+    {//section/}
+  </table>
+</div>

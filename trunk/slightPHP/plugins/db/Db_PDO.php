@@ -378,9 +378,10 @@ class Db_PDO extends DbObject{
 			$this->__connect($forceReconnect=true);
 		}
 		if(defined("DEBUG")){
-			echo "SQL:$sql\n";
+			echo "<p>SQL:$sql\n";
 			print_r($bind1);
 			print_r($bind2);
+			echo '</p>';
 		}
 		$stmt = Db_PDO::$globals[$this->key]->prepare($sql);
 		
@@ -388,6 +389,9 @@ class Db_PDO extends DbObject{
 			
 			$this->error['code']=Db_PDO::$globals[$this->key]->errorCode ();
 			$this->error['msg']=Db_PDO::$globals[$this->key]->errorInfo ();
+			if(defined("DEBUG")){
+				var_dump($this->error);
+			}
 			return false;
 		}
 		if(!empty($bind1)){
@@ -413,6 +417,9 @@ class Db_PDO extends DbObject{
 		}else{
 			$this->error['code']=$stmt->errorCode ();
 			$this->error['msg']=$stmt->errorInfo ();
+			if(defined("DEBUG")){
+				var_dump($this->error);
+			}
 		}
 		return false;
 

@@ -1,0 +1,49 @@
+{/include file="common/header.html"/}
+<p>所有会员</p>
+<div class="form">
+  <form action="{/get_url rule='/goods/index'/}" method="post" id="js-form">
+    <fieldset class="clearfix">
+    	<ul class="verify">
+          <li class="ftext"><label class="w80">分类：</label>
+            <span><select id="one" name="cat_id">
+            <option value="0">-----选择分类-----</option>
+            {/section name=i loop=$catelist/}
+            <option value="{/$catelist[i].cat_id/}" {/if $catelist[i].cat_id eq $cat_id/}selected="selected"{//if/}>{/$catelist[i].pre/}{/$catelist[i].cat_name/}</option>
+            {//section/}
+        	</select></span>
+            </li>
+          <li><label class="w80">关键字：</label>
+            <span><input type="text" value="{/$key/}" class="text" name="key" />（商品名称，条形码）<input type="submit" name="" id="button" value="查询" /></span>
+            </li>
+        </ul>
+    </fieldset>
+  </form>
+</div>
+<div class="listtable">
+  <table width="100%">
+    <tr>
+      <td>商品条形码</td>
+      <td>商品名称</td>
+      <td>所属分类</td>
+      <td>售价(元)</td>
+      <td>进价(元)</td>
+      <td>促销价(元)</td>
+      <td>市场价(元)</td>
+      <td>库存</td>
+      <td>管理</td>
+    </tr>
+    {/section name=i loop=$goods/}
+    <tr>
+      <td>{/$goods[i].goods_sn/}</td>
+      <td>{/$goods[i].goods_name/}</td>
+      <td>{/$goods[i].cat_name/}</td>
+      <td><span class="red fb">{/$goods[i].out_price/}</span></td>
+      <td><span class="red">{/$goods[i].in_price/}</span></td>
+      <td>{/if $goods[i].ispromote eq 1/}{/$goods[i].promote_price/}{/else/}未促销{//if/}</td>
+      <td>{/$goods[i].market_price/}</td>
+      <td>{/if $goods[i].stock gt $goods[i].warn_stock/}{/$goods[i].stock/}{/else/}<span class="red fb" title="低于最小库存">{/$goods[i].stock/}(缺)</span>{//if/}</td>
+      <td><a href="{/get_url rule='/goods/addgoods' data='gid='|cat:$goods[i].goods_id/}">编辑</a>|<a href="{/get_url rule='/purchase/addpurchase' data='gid='|cat:$goods[i].goods_id/}">入库</a></td>
+    </tr>
+    {//section/}
+  </table>
+</div>
