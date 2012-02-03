@@ -1,0 +1,39 @@
+{/include file="common/header.html"/}
+<p>所有会员</p>
+<div class="form">
+  <form action="{/get_url rule='/member/index'/}" method="post" id="js-form">
+    <fieldset class="clearfix">
+    	<ul class="verify">
+          <li><label class="w80">搜索：</label>
+            <span><input type="text" value="{/$key/}" class="text" name="key" />（会员卡，会员名，电话，手机）<input type="submit" name="" id="button" value="查询" /></span>
+            </li>
+        </ul>
+    </fieldset>
+  </form>
+</div>
+<div class="listtable">
+  <table width="100%">
+    <tr>
+      <td>会员卡卡号</td>
+      <td>会员姓名</td>
+      <td>会员等级</td>
+      <td>会员积分</td>
+      <td>折扣</td>
+      <td>手机号</td>
+      <td>座机号</td>
+      <td>管理</td>
+    </tr>
+    {/section name=i loop=$member/}
+    <tr {/if $member[i].state eq 0/}bgcolor="#efefef"{//if/}>
+      <td>{/$member[i].membercardid/}{/if $member[i].state eq 0/}<span class="red">(禁用)</span>{//if/}</td>
+      <td>{/$member[i].realname/}</td>
+      <td>{/$member[i].grade|mbgroup:"mgroup_name"/}</td>
+      <td>{/$member[i].credit/}</td>
+      <td>{/$member[i].grade|mbgroup:"discount"/}%</td>
+      <td>{/$member[i].mobile/}</td>
+      <td>{/$member[i].phone/}</td>
+      <td><a href="{/get_url rule='/member/addmember' data='mid='|cat:$member[i].mid/}">编辑</a></td>
+    </tr>
+    {//section/}
+  </table>
+</div>

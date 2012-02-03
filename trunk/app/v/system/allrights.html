@@ -1,0 +1,33 @@
+<dt><a href="javascript:void(0)">系统权限</a></dt>
+<ul>
+  <li>
+    <input type="checkbox" name="system[]" value="系统信息:index" checked="checked" />
+    系统信息</li>
+  <li>
+    <input type="checkbox" name="system[]" value="系统配置:setting" {/if $action.menu.system.setting/}checked="checked"{//if/} />
+    系统配置</li>
+  <li>
+    <input type="checkbox" name="system[]" value="权限管理:rights" {/if $action.menu.system.rights/}checked="checked"{//if/} />
+    权限管理</li>
+  <li>
+    <input type="checkbox" name="system[]" value="添加管理组:addrights" {/if $action.menu.system.addrights/}checked="checked"{//if/} />
+    添加管理组</li>
+</ul>
+<dt><a href="javascript:void(0)">帐号权限</a></dt>
+<ul>
+  <li>
+    <input type="checkbox" name="account[]" value="帐号管理:index" {/if $action.menu.account.index/}checked="checked"{//if/} />
+    帐号管理</li>
+  <li>
+    <input type="checkbox" name="account[]" value="密码修改:modifypwd" {/if $action.menu.account.modifypwd/}checked="checked"{//if/} />
+    密码修改</li>
+</ul>
+<dt><a href="javascript:void(0)">会员管理权限</a></dt>
+<ul>
+  <li>
+    <input type="checkbox" name="member[]" value="帐号管理:index" {/if $action.menu.member.index/}checked="checked"{//if/} />
+    帐号管理</li>
+  <li>
+    <input type="checkbox" name="member[]" value="添加帐号:addmember" {/if $action.menu.member.addmember/}checked="checked"{//if/} />
+    密码修改</li>
+</ul>
