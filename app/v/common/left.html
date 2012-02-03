@@ -30,5 +30,55 @@
       </ul>
     </dd>
     {//if/}
+    {/if $menu.category/}
+    <dt><a href="javascript:void(0)">分类管理</a></dt>
+    <dd>
+      <ul>
+		{/foreach from=$menu.category item=items key=k/}
+        <li><a href="{/get_url rule='/category/'/}{/$k/}" target="iframepage">{/$items/}</a></li>
+        {//foreach/}
+      </ul>
+    </dd>
+    {//if/}
+    {/if $menu.goods/}
+    <dt><a href="javascript:void(0)">商品管理</a></dt>
+    <dd>
+      <ul>
+		{/foreach from=$menu.goods item=items key=k/}
+        <li><a href="{/get_url rule='/goods/'/}{/$k/}" target="iframepage">{/$items/}</a></li>
+        {//foreach/}
+      </ul>
+    </dd>
+    {//if/}
+    {/if $menu.purchase/}
+    <dt><a href="javascript:void(0)">进货管理</a></dt>
+    <dd>
+      <ul>
+		{/foreach from=$menu.purchase item=items key=k/}
+        <li><a href="{/get_url rule='/purchase/'/}{/$k/}" target="iframepage">{/$items/}</a></li>
+        {//foreach/}
+      </ul>
+    </dd>
+    {//if/}
+    {/if $menu.sale/}
+    <dt><a href="javascript:void(0)">出货管理</a></dt>
+    <dd>
+      <ul>
+		{/foreach from=$menu.sale item=items key=k/}
+        <li><a href="{/get_url rule='/sale/'/}{/$k/}" target="iframepage">{/$items/}</a></li>
+        {//foreach/}
+      </ul>
+    </dd>
+    {//if/}
+    {/if $menu.statistics/}
+    <dt><a href="javascript:void(0)">统计管理</a></dt>
+    <dd>
+      <ul>
+		{/foreach from=$menu.statistics item=items key=k/}
+        <li><a href="{/get_url rule='/statistics/'/}{/$k/}" target="iframepage">{/$items/}</a></li>
+        {//foreach/}
+      </ul>
+    </dd>
+    {//if/}
   </dl>
 </div>

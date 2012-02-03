@@ -59,7 +59,9 @@ class c_account extends base_c {
 			}
 			$this->ShowMsg('添加出错！原因：'.$adminObj->getError());
 		}
-		return $this->render('account/index.html',$this->params);
+		$groupObj = new m_group();
+		$this->params['group'] = $groupObj->select()->items;
+		return $this->render('account/addaccount.html',$this->params);
 	}
 	
 	function pagemodifypwd($inPath){
