@@ -1,0 +1,17 @@
+<p>所有用户</p>
+<div>
+  <table width="100%">
+    <tr>
+      <td>用户名称</td>
+      <td>用户组</td>
+      <td>管理</td>
+    </tr>
+    {/section name=i loop=$account/}
+    <tr>
+      <td>{/$account[i].admin_name/}</td>
+      <td>{/$account[i].group_name/}</td>
+      <td><a href="{/get_url rule='/account/index' data='aid='|cat:$account[i].admin_id/}">编辑</a>|<a href="{/get_url rule='/system/rights' data='gid='|cat:$account[i].gid/}">查看权限</a></td>
+    </tr>
+    {//section/}
+  </table>
+</div>

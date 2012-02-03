@@ -1,0 +1,20 @@
+{/include file="common/header.html"/}
+<div class="form">
+<form action="{/get_url rule='/account/modifypwd'/}" method="post" id="js-form">
+    <fieldset class="clearfix">
+		<p>修改密码</p>
+		<ul class="verify">
+          <li><label class="w80"><font class="red"> * </font>原密码：</label>
+            <span><input type="password" value="" class="text" name="old_pwd" /></span>
+            </li>
+          <li><label class="w80"><font class="red"> * </font>新密码：</label>
+            <span><input type="password" value="" class="text" name="new_pwd" /></span>
+            </li>
+          <li><label class="w80"><font class="red"> * </font>新密码：</label>
+            <span><input type="password" value="" class="text" name="new_pwd2" /></span>
+            </li>
+		</ul>
+        <dt><input type="submit" name="" id="button" value="修改" /></dt>
+    </fieldset>
+</form>
+</div>
