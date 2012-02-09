@@ -45,5 +45,8 @@ class c_main extends base_c {
 		$cap = new SCaptcha();
 		$code = $cap->CreateImage();
 	}
+	function pageTest(){
+		
+	}
 }
 ?>

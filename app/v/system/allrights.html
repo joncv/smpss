@@ -52,3 +52,24 @@
     <input type="checkbox" name="goods[]" value="添加商品:addgoods" {/if $action.menu.goods.addgoods/}checked="checked"{//if/} />
     添加商品</li>
 </ul>
+<dt><a href="javascript:void(0)">库存管理权限</a></dt>
+<ul>
+  <li>
+    <input type="checkbox" name="purchase[]" value="库存管理:index" {/if $action.menu.purchase.index/}checked="checked"{//if/} />
+    库存管理</li>
+  <li>
+    <input type="checkbox" name="purchase[]" value="添加库存:purchase" {/if $action.menu.purchase.purchase/}checked="checked"{//if/} />
+    添加库存</li>
+</ul>
+<dt><a href="javascript:void(0)">销售管理权限</a></dt>
+<ul>
+  <li>
+    <input type="checkbox" name="sales[]" value="销售管理:index" {/if $action.menu.sales.index/}checked="checked"{//if/} />
+    库存管理</li>
+  <li>
+    <input type="checkbox" name="sales[]" value="出库:sales" {/if $action.menu.sales.sales/}checked="checked"{//if/} />
+    出库</li>
+  <li>
+    <input type="checkbox" name="sales[]" value="退货:return" {/if $action.menu.sales.return/}checked="checked"{//if/} />
+    退货</li>
+</ul>

@@ -60,12 +60,12 @@
       </ul>
     </dd>
     {//if/}
-    {/if $menu.sale/}
+    {/if $menu.sales/}
     <dt><a href="javascript:void(0)">出货管理</a></dt>
     <dd>
       <ul>
-		{/foreach from=$menu.sale item=items key=k/}
-        <li><a href="{/get_url rule='/sale/'/}{/$k/}" target="iframepage">{/$items/}</a></li>
+		{/foreach from=$menu.sales item=items key=k/}
+        <li><a href="{/get_url rule='/sales/'/}{/$k/}" target="iframepage">{/$items/}</a></li>
         {//foreach/}
       </ul>
     </dd>

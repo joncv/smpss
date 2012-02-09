@@ -21,16 +21,12 @@
           <li><label class="w80"><font class="red"> * </font>商品售价：</label>
             <span><input type="text" value="{/$goods.out_price/}" class="text w80" name="out_price" />元</span>
             </li>
+          <li><label class="w80"><font class="red"> * </font>商品进价：</label>
+            <span><input type="text" value="{/$goods.in_price/}" class="text w80" name="in_price" />元</span>
+            </li>
           <li><label class="w80">市场价：</label>
             <span><input type="text" value="{/$goods.market_price/}" class="text w80" name="market_price" />元(默认市场价为售价的1.2倍)</span>
             </li>
-          {/if $goods.goods_id eq ""/}
-          <li><label class="w80">商品进价：</label>
-            <span><input type="text" value="" class="text w80" name="in_price" />元</span>
-            <label class="w80">入库数量：</label>
-            <span><input type="text" value="" class="text w80" name="in_num" />(记重商品单位为千克)</span>
-            </li>
-          {//if/}
           <li><label class="w80">商品重量：</label>
             <span><input type="text" value="{/$goods.weight/}" class="text w80" name="weight" /></span>
             </li>
@@ -57,7 +53,7 @@
             </li>
 		</ul>
       <dt>
-        <input type="submit" name="" id="button" value="{/if $goods.goods_id/}编辑{/else/}添加{//if/}" />
+        <input type="submit" name="" id="button" value="{/if $goods.cat_id/}编辑{/else/}添加{//if/}" />
       </dt>
     </fieldset>
   </form>

@@ -1,0 +1,47 @@
+{/include file="common/header.html"/}
+<div class="form">
+  <form action="{/get_url rule='/sales/sales'/}" method="post" id="js-form">
+    <fieldset class="clearfix">
+		<ul class="verify">
+          <li><label class="w80"><font class="red"> * </font>商品条形码：</label>
+            <span><input type="text" value="" class="text" name="goods_sn" /></span>
+            </li>
+		</ul>
+      <dt>
+        <input type="submit" name="" id="button" value="加人订单" />
+      </dt>
+    </fieldset>
+  </form>
+</div>
+<div class="listtable">
+  <table width="100%">
+    <tr>
+      <td>名称</td>
+      <td>数量</td>
+      <td>单价</td>
+      <td>优惠价</td>
+    </tr>
+    {/section name=i loop=$info/}
+    <tr>
+      <td>{/$info[i].goods_name/}</td>
+      <td>{/$info[i].num/}</td>
+      <td>{/$info[i].out_price/}</td>
+      <td>{/$info[i].p_discount/}</td>
+    </tr>
+    {//section/}
+  </table>
+</div>
+<div class="form">
+  <form action="{/get_url rule='/sales/out'/}" method="post" id="js-form2">
+    <fieldset class="clearfix">
+		<ul class="verify">
+          <li><label class="w80"><font class="red"> * </font>会员卡号：</label>
+            <span><input type="text" value="" class="text" name="cardid" /></span>
+            </li>
+		</ul>
+      <dt>
+        <input type="submit" name="" id="button" value="确认提交" />
+      </dt>
+    </fieldset>
+  </form>
+</div>

@@ -1,0 +1,3 @@
+{/if $total /}
+<div class="task-list-page clearfix"><a href="/{/$first/}">首页</a>{/if $prepg eq null/}{/else/}<a href="/{/$prepg/}" class="prev">上一页</a>{//if/}{/section name=sec loop=$pages start=$start max=$max/}<a href="/{/$pages[sec].url/}" {/if $currpage eq $pages[sec].page/}class="cur"{//if/}>{/$pages[sec].page/}</a>{//section/}{/ if $nextpg eq null/}<a href="#" class="next">下一页</a>{/else/}<a href="/{/$nextpg/}" class="next">下一页</a>{//if/}{/if $currpage lt $total/}<a href="/{/$last/}">尾页</a>{//if/}</div>
+{//if/}
