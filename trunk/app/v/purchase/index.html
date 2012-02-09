@@ -1,7 +1,7 @@
 {/include file="common/header.html"/}
 <p>所有会员</p>
 <div class="form">
-  <form action="{/get_url rule='/goods/index'/}" method="post" id="js-form">
+  <form action="{/get_url rule='/purchase/index'/}" method="post" id="js-form">
     <fieldset class="clearfix">
     	<ul class="verify">
           <li class="ftext"><label class="w80">分类：</label>
@@ -24,27 +24,21 @@
     <tr>
       <td>商品条形码</td>
       <td>商品名称</td>
-      <td>所属分类</td>
-      <td>售价(元)</td>
-      <td>促销价(元)</td>
-      <td>市场价(元)</td>
+      <td>进价(元)</td>
+      <td>入库</td>
       <td>库存</td>
-      <td>库存总额(元)</td>
-      <td>销售总额(元)</td>
+      <td>已售</td>
       <td>管理</td>
     </tr>
-    {/section name=i loop=$goods/}
+    {/section name=i loop=$purchase/}
     <tr>
-      <td>{/$goods[i].goods_sn/}</td>
-      <td>{/$goods[i].goods_name/}</td>
-      <td>{/$goods[i].cat_name/}</td>
-      <td><span class="red fb">{/$goods[i].out_price/}</span></td>
-      <td>{/if $goods[i].ispromote eq 1/}{/$goods[i].promote_price/}{/else/}未促销{//if/}</td>
-      <td>{/$goods[i].market_price/}</td>
-      <td>{/if $goods[i].stock gt $goods[i].warn_stock/}{/$goods[i].stock/}{/else/}<span class="red fb" title="低于最小库存">{/$goods[i].stock/}(缺)</span>{//if/}</td>  
-      <td><span class="red">{/$goods[i].countamount/}</span></td>
-      <td><span class="red">{/$goods[i].salesamount/}</span></td>
-      <td><a href="{/get_url rule='/goods/addgoods' data='gid='|cat:$goods[i].goods_id/}">编辑</a>|<a href="{/get_url rule='/purchase/purchase' data='gid='|cat:$goods[i].goods_id/}">入库</a></td>
+      <td>{/$purchase[i].goods_sn/}</td>
+      <td>{/$purchase[i].goods_name/}<a href="{/get_url rule='/purchase/purchase' data='id='|cat:$purchase[i].goods_id/}">(入库)</a></td>
+      <td><span class="red">{/$purchase[i].in_price/}</span></td>
+      <td>{/$purchase[i].in_num/}</td>
+      <td><span class="red fb">{/$purchase[i].in_num-$purchase[i].out_num/}</span></td>
+      <td>{/$purchase[i].out_num/}</td>
+      <td>{/if $purchase[i].out_num eq 0/}<a onclick="return(confirm('只有入库错误的时候才使用，你确认入库错误?'))" href="{/get_url rule='/purchase/purchase' data='ac=del&gid='|cat:$purchase[i].id/}">删除</a>{//if/}</td>
     </tr>
     {//section/}
   </table>

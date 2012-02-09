@@ -1,0 +1,68 @@
+{/include file="common/header.html"/}
+<div class="form">
+  <form action="{/get_url rule='/sales/return'/}" method="post" id="js-form">
+    <fieldset class="clearfix">
+      <ul class="verify">
+        <li>
+          <label class="w80"><font class="red"> * </font>订单号：</label>
+          <span>
+          <input type="text" value="" class="text" name="order_id" />
+          </span> </li>
+      </ul>
+      <dt>
+        <input type="submit" name="" id="button" value="查询" />
+      </dt>
+    </fieldset>
+  </form>
+</div>
+{/if $order_id/}
+<div class="form">
+  <form action="{/get_url rule='/sales/return'/}" method="post" id="js-form2">
+	<fieldset class="clearfix">
+    <input type="hidden" name="ac" value="del" />
+    <input type="hidden" name="order_id" value="{/$order_id/}" />
+    <div class="listtable">
+      <table width="100%">
+        <tr>
+          <td>&nbsp;</td>
+          <td>名称</td>
+          <td>数量</td>
+          <td>总价</td>
+          <td>销售时间</td>
+        </tr>
+        {/section name=i loop=$list/}
+        <tr>
+          {/if $list[i].refund_type eq 0/}
+          <td><input type="checkbox" name="sid[{/$smarty.section.i.index/}]" class="ck" value="{/$list[i].sid/}" /></td>
+          <td>{/$list[i].goods_name/}</td>
+          <td><input type="text" name="num[{/$smarty.section.i.index/}]" class="text w80" value="{/$list[i].num/}" /></td>
+          <td>{/$list[i].price*$list[i].num/}</td>
+          <td>{/$list[i].dateymd/}</td>
+          {/else/}
+          <td colspan="5">商品：{/$list[i].goods_name/}，已经有过退款记录不能够再次退款！退款金额：{/$list[i].refund_amount/}元</td>
+          {//if/}
+        </tr>
+        {/sectionelse/}
+        <tr>
+          <td colspan="5">没有该订单信息</td>
+        </tr>
+        {//section/}
+        <tr>
+          <td colspan="5">全选<input type="checkbox" name="all" onclick="SelectAll()" /> &nbsp; <input type="submit" value="确认退货" /></td>
+        </tr>
+      </table>
+    </div>
+    </fieldset>
+  </form>
+</div>
+<script>
+//全选
+function SelectAll() {
+ var checkboxs=$(".ck");
+ for (var i=0;i<checkboxs.length;i++) {
+  var e=checkboxs[i];
+  e.checked=!e.checked;
+ }
+}
+</script>
+{//if/}
