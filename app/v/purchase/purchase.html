@@ -5,13 +5,13 @@
     <input type="hidden" name="goods_id" value="{/$goods.goods_id/}" />
 		<ul class="verify">
           <li><label class="w80"><font class="red"> * </font>商品条形码：</label>
-            <span><input type="text" value="{/$goods.goods_sn/}" class="text" name="goods_sn" /></span>
+            <span><input type="text" value="{/$goods.goods_sn/}" class="text" name="goods_sn" id="goods_sn" /></span>
             </li>
           <li><label class="w80"><font class="red"> * </font>数量：</label>
-            <span><input type="text" value="" class="text w80" name="in_num" />(记重商品单位为千克)</span>
+            <span><input type="text" value="" class="text w80" name="in_num" id="in_num" />(记重商品单位为千克)</span>
             </li>
           <li><label class="w80"><font class="red"> * </font>进价：</label>
-            <span><input type="text" value="{/$goods.in_price/}" class="text w80" name="in_price" />元</span>
+            <span><input type="text" value="{/$goods.in_price/}" class="text w80" name="in_price" id="in_price" />元</span>
             </li>
 		</ul>
       <dt>
@@ -20,3 +20,10 @@
     </fieldset>
   </form>
 </div>
+<script type="text/javascript">
+    $(function() { 
+		$("form").validity(function() {
+            $("#goods_sn,#in_num,#in_price").require("不能够为空!").match("number");
+        });
+    });
+</script>

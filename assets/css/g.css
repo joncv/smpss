@@ -9,7 +9,7 @@ ins { text-decoration:none }
 del { text-decoration:line-through }
 table { border-collapse:collapse; border-spacing:0 }
 input { font-size:12px }
-body { font-family:Arial, Helvetica, sans-serif, "宋体"; font-size:12px; line-height:1.6; color:#333 }
+body { font-family:Arial, Helvetica, sans-serif, "宋体"; font-size:12px; line-height:1.4; color:#333 }
 select, input, button, textarea { font:100% Tahoma, Helvetica, Arial, sans-serif }
 a:link, a:visited, a:hover, a:active { font-family:Arial, Helvetica, sans-serif, "宋体"; text-decoration:none; outline:none }
 a { color:#1261D7 }
@@ -72,7 +72,8 @@ a.underline { text-decoration:underline; font-family:"宋体" }
 .fr { float:right }
 .fl { float:left }
 .cer { text-align:center }
-.bd { overflow:hidden; #zoom:1;word-wrap:break-word; word-break:break-all }
+.bd { overflow:hidden; #zoom:1;
+word-wrap:break-word; word-break:break-all }
 .arrow { border-color:transparent; border-width:6px; border-style:solid; padding:0; width:0; height:0px; font-size:0; line-height:0; _filter:chroma(color=#dddddd) }
 .arrow-bottom { border-bottom-color:#fc0; border-top-width:0px; _border-left-color:#ddd; _border-right-color:#ddd }
 .arrow-left { border-left-color:#fc0; border-right-width:0px; _border-top-color:#ddd; _border-bottom-color:#ddd }
@@ -80,9 +81,11 @@ a.underline { text-decoration:underline; font-family:"宋体" }
 .arrow-right { border-right-color:#fc0; border-left-width:0px; _border-top-color:#ddd; _border-bottom-color:#ddd }
 .close { font-family:TahomaSansMS; font-size:12px; font-weight:bold; text-align:center; width:10px; height:10px; line-height:10px; overflow:hidden; color:#333; cursor:pointer }
 .close a { color:#333; text-decoration:none; cursor:pointer; font-family:"宋体" }
+.form fieldset{border:none;}
 .form fieldset .text { height:18px; line-height:18px; width:210px; padding:5px 4px; margin-right:9px; border:1px solid #bdbdbd; background-color:#fff; font-family:Arial, Helvetica, sans-serif; font-weight:bold }
 .form fieldset li.focus input.text { border-color:#b1ce86; background-color:#f1ffdc }
-.form fieldset input.redio { vertical-align:top; padding:0; margin:0 5px 0 0; +vertical-align:middle}
+.form fieldset input.redio { vertical-align:top; padding:0; margin:0 5px 0 0; +vertical-align:middle
+}
 .form fieldset input.checkbox { vertical-align:middle; position:relative; padding:0; left:0; margin:-3px 5px 0; top:0 }
 .form fieldset input.file { height:22px }
 .form fieldset .select { margin-top:4px; font-size:12px; padding:2px 3px }
@@ -97,7 +100,7 @@ a.underline { text-decoration:underline; font-family:"宋体" }
 .form fieldset .ftext span label { }
 .form fieldset li:after { content:"\0020"; display:block; height:0; clear:both }
 *+html .form fieldset li { overflow:hidden }
-.form .verify_msg { padding:3px 6px 3px 20px; height:20px; line-height:20px; float:left; display:none; font-size:12px; background:url(http://s.zbjimg.com/v3/r/p/m-icon.png) -1000px no-repeat }
+.form .verify_msg { padding:3px 6px 3px 20px; height:20px; line-height:20px; float:left; display:none; font-size:12px; }
 .form fieldset .w80 { width:80px }
 .form fieldset .w120 { width:120px }
 .form fieldset .w150 { width:150px }
@@ -106,5 +109,13 @@ a.underline { text-decoration:underline; font-family:"宋体" }
 .form fieldset .w300 { width:300px }
 .form fieldset .w350 { width:350px }
 .form fieldset .w430 { width:430px }
-#footer{height:70px; width:100%; margin:0 auto; background:url(images/bg.png) repeat-x bottom center;}
-.copy{padding-top:50px; text-align:center; color:#999;}
+#footer { height:70px; width:100%; margin:0 auto; background:url(images/bg.png) repeat-x bottom center; }
+.copy { padding-top:50px; text-align:center; color:#999; }
+/*table*/
+.listtable{width:100%; margin:0 auto;}
+.listtable table th,.listtable table td{text-align:left;}
+.listtable table th { color: #4f6b72; border: 1px solid #C1DAD7; letter-spacing: 2px; text-transform: uppercase;padding: 10px 6px; background: #CAE8EA no-repeat; }
+.listtable table td { border: 1px solid #C1DAD7; background: #fff; font-size:12px; padding: 10px 6px; color: #4f6b72; }
+.listtable table td.alt { background: #F5FAFA; color: #797268; }
+/*按钮*/
+#button{border:1px #d28949 solid; background:#ffe5bb; color:#d84700; width:80px; height:30px; line-height:30px; font-weight:bold;}

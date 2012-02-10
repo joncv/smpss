@@ -1,0 +1,26 @@
+{/include file="common/header.html"/}
+<div class="listtable">
+  <table width="400">
+	<tr>
+      <td colspan="3">订单号：{/$order_id/} 购买时间：{/$smarty.now|date_format:"%Y-%m-%d %H:%M:%S"/}</td>
+    </tr>
+    <tr>
+      <th>名称</th>
+      <th>数量</th>
+      <th>总价</th>
+    </tr>
+    {/section name=i loop=$goods/}
+    <tr>
+      <td>{/$goods[i].goods_name/}</td>
+      <td>{/$goods[i].num/}</td>
+      <td>{/$goods[i].out_price*$goods[i].num/}</td>
+    </tr>
+    {//section/}
+    <tr>
+      <td colspan="3" class="alt">总价：{/$out_amount/}元，优惠：{/if $mem_amount gt 0/}{/$mem_amount/}元{/elseif $pro_amount gt 0/}{/$pro_amount/}元{/else/}无{//if/}。实收：{/$real_amount/}元</td>
+    </tr>
+    <tr>
+      <td colspan="5"><input name="打印" onclick="" type="button" value="打印" /></td>
+    </tr>
+  </table>
+</div>

@@ -8,8 +8,8 @@ class c_ajax extends base_c {
 	public function pagegetregion() {
 		$aJson = array ();
 		$regionObj = new m_region ();
-		$iPid = Base_Utils::getStr ( $_POST ['parent_id'], 'int' );
-		$exce = Base_Utils::getStr ( $_POST ['exce'], 'int' );
+		$iPid = ( int ) $_REQUEST ['parent_id'];
+		$exce = ( int ) $_REQUEST ['exce'];
 		$aRegions = $regionObj->select ( array ("parent_id" => $iPid ), '*', '', 'order by region_id asc' )->items;
 		if (empty ( $iPid )) {
 			echo json_encode ( array () );
@@ -35,5 +35,5 @@ class c_ajax extends base_c {
 			}
 		}
 	}
-	
+
 }

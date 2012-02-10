@@ -1,5 +1,4 @@
 {/include file="common/header.html"/}
-<p>所有会员</p>
 <div class="form">
   <form action="{/get_url rule='/member/index'/}" method="post" id="js-form">
     <fieldset class="clearfix">
@@ -14,14 +13,14 @@
 <div class="listtable">
   <table width="100%">
     <tr>
-      <td>会员卡卡号</td>
-      <td>会员姓名</td>
-      <td>会员等级</td>
-      <td>会员积分</td>
-      <td>折扣</td>
-      <td>手机号</td>
-      <td>座机号</td>
-      <td>管理</td>
+      <th>会员卡卡号</th>
+      <th>会员姓名</th>
+      <th>会员等级</th>
+      <th>会员积分</th>
+      <th>折扣</th>
+      <th>手机号</th>
+      <th>座机号</th>
+      <th>管理</th>
     </tr>
     {/section name=i loop=$member/}
     <tr {/if $member[i].state eq 0/}bgcolor="#efefef"{//if/}>
