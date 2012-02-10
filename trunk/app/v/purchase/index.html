@@ -1,5 +1,4 @@
 {/include file="common/header.html"/}
-<p>所有会员</p>
 <div class="form">
   <form action="{/get_url rule='/purchase/index'/}" method="post" id="js-form">
     <fieldset class="clearfix">
@@ -22,13 +21,13 @@
 <div class="listtable">
   <table width="100%">
     <tr>
-      <td>商品条形码</td>
-      <td>商品名称</td>
-      <td>进价(元)</td>
-      <td>入库</td>
-      <td>库存</td>
-      <td>已售</td>
-      <td>管理</td>
+      <th>商品条形码</th>
+      <th>商品名称</th>
+      <th>进价(元)</th>
+      <th>入库</th>
+      <th>库存</th>
+      <th>已售</th>
+      <th>管理</th>
     </tr>
     {/section name=i loop=$purchase/}
     <tr>

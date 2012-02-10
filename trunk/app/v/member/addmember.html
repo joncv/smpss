@@ -5,10 +5,10 @@
     <input type="hidden" value="{/$member.mid/}" name="mid" />
 		<ul class="verify">
           <li><label class="w80"><font class="red"> * </font>真实名字：</label>
-            <span><input type="text" value="{/$member.realname/}" class="text" name="realname" /></span>
+            <span><input type="text" value="{/$member.realname/}" class="text" name="realname" id="realname" /></span>
             </li>
           <li><label class="w80"><font class="red"> * </font>会员卡卡号：</label>
-            <span><input type="text" class="text" name="membercardid" value="{/$member.membercardid/}" /></span>
+            <span><input type="text" class="text" name="membercardid" value="{/$member.membercardid/}" id="membercardid" /></span>
             </li>
           <li><label class="w80">身份证号：</label>
             <span><input type="text" class="text" name="cardid" value="{/$member.cardid/}" /></span>
@@ -22,7 +22,7 @@
           <li><label class="w80">Email：</label>
             <span><input type="text" class="text" name="email" value="{/$member.email/}" /></span>
             </li>
-          <li><label class="w80">地区选择：</label>
+          <li class="ftext"><label class="w80">地区选择：</label>
             <span><select id="province" name="prov_id" onChange="getcity(this.value)">
             <option value="">---请选择省份---</option>
         	</select>
@@ -46,9 +46,13 @@
     </fieldset>
   </form>
 </div>
+<script type="text/javascript" src="/assets/js/g.js"></script>
 <script type="text/javascript" src="/assets/js/region.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
+	$("form").validity(function() {
+		$("#membercardid,#realname").require("不能够为空!");
+     });
 	getprovince('1','{/$member.prov_id/}');
 	{/if $member.prov_id/}
 	getcity('{/$member.prov_id/}','{/$member.city_id/}');
