@@ -1,50 +1,51 @@
 <?php
 /**
  * 控制器基类
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  */
 class base_c extends SGui {
-	public $params = array();
+	public $params = array ();
 	
-	public function __construct(){
+	public function __construct() {
 		//define(DEBUG, 1);
-		$this->params['_time'] = time();
-		self::getRights();
+		$this->params ['_time'] = time ();
+		$this->params ['version'] = "SmPSS" . base_Constant::VERSION;
+		self::getRights ();
 	}
 	
-	function isLogin(){
-		if($_COOKIE['key']){
-			if($_COOKIE['key'] != md5($_COOKIE['admin_id'].$_COOKIE['admin_name'].$_COOKIE['lastlogintime'].base_Constant::COOKIE_KEY)){
-				$cookie['key'] = '';
-				$cookie['admin_id'] = '';
-				$cookie['gid'] = '';
-				$cookie['admin_name'] = '';
-				$cookie['lastlogintime'] = '';
-				base_Utils::ssetcookie($cookie,-1);
+	function isLogin() {
+		if ($_COOKIE ['key']) {
+			if ($_COOKIE ['key'] != md5 ( $_COOKIE ['admin_id'] . $_COOKIE ['admin_name'] . $_COOKIE ['lastlogintime'] . base_Constant::COOKIE_KEY )) {
+				$cookie ['key'] = '';
+				$cookie ['admin_id'] = '';
+				$cookie ['gid'] = '';
+				$cookie ['admin_name'] = '';
+				$cookie ['lastlogintime'] = '';
+				base_Utils::ssetcookie ( $cookie, - 1 );
 				return false;
 			}
-		}else{
+		} else {
 			return false;
 		}
 		return true;
 	}
 	
-	function checkRights($inPath=array()){
-		$gid = (int)$_COOKIE['gid'];
-		$cacheName = "action_code_group_".$gid;
-		$cache = SCache::getCacheEngine('file');
-		$cache->init(array("dir"=>SlightPHP::$appDir."/cache","depth"=>3));
-		$rs = $cache->get($cacheName);
-		if($cache and $rs){
-		}else{
-			$rsObj = base_mAPI::get('m_group',$gid);
-			$rs = $rsObj->get();
-			$cache->set($cacheName,$rs);
+	function checkRights($inPath = array()) {
+		$gid = ( int ) $_COOKIE ['gid'];
+		$cacheName = "action_code_group_" . $gid;
+		$cache = SCache::getCacheEngine ( 'file' );
+		$cache->init ( array ("dir" => SlightPHP::$appDir . "/cache", "depth" => 3 ) );
+		$rs = $cache->get ( $cacheName );
+		if ($cache and $rs) {
+		} else {
+			$rsObj = base_mAPI::get ( 'm_group', $gid );
+			$rs = $rsObj->get ();
+			$cache->set ( $cacheName, $rs );
 		}
-		if($rs){
-			$action = unserialize($rs['action_code']);
-			$c = $inPath[1].'_'.$inPath[2];
-			if(in_array($c, $action['action']) or $action['all']==1){
+		if ($rs) {
+			$action = unserialize ( $rs ['action_code'] );
+			$c = $inPath [1] . '_' . $inPath [2];
+			if (in_array ( $c, $action ['action'] ) or $action ['all'] == 1) {
 				return true;
 			}
 			return false;
@@ -52,20 +53,23 @@ class base_c extends SGui {
 		return false;
 	}
 	
-	private function getRights(){
-		$gid = (int)$_COOKIE['gid'];
-		$cacheName = "action_code_group_".$gid;
-		$cache = SCache::getCacheEngine('file');
-		$cache->init(array("dir"=>SlightPHP::$appDir."/cache","depth"=>3));
-		$rs = $cache->get($cacheName);
-		if($cache and $rs){
-		}else{
-			$rsObj = base_mAPI::get('m_group',$gid);
-			$rs = $rsObj->get();
-			$cache->set($cacheName,$rs);
+	private function getRights() {
+		$gid = ( int ) $_COOKIE ['gid'];
+		$cacheName = "action_code_group_" . $gid;
+		$cache = SCache::getCacheEngine ( 'file' );
+		$cache->init ( array ("dir" => SlightPHP::$appDir . "/cache", "depth" => 3 ) );
+		$rs = $cache->get ( $cacheName );
+		if ($cache and $rs) {
+		} else {
+			$rsObj = base_mAPI::get ( 'm_group', $gid );
+			$rs = $rsObj->get ();
+			$cache->set ( $cacheName, $rs );
 		}
-		$action = unserialize($rs['action_code']);
-		$this->params['menu'] = $action['menu'];
+		$action = unserialize ( $rs ['action_code'] );
+		$this->params ['head_title'] = base_Constant::DEFAULT_TITLE;
+		$this->params ['menu'] = $action ['menu'];
+		$this->params ['_userid'] = $_COOKIE ['admin_id'];
+		$this->params ['_adminname'] = $_COOKIE ['admin_name'];
 	}
 	/**
 	 * 获取uri参数
@@ -87,24 +91,24 @@ class base_c extends SGui {
 	/**
 	 * 构建完整url
 	 */
-	public function createUrl($route,$params=array()) {
+	public function createUrl($route, $params = array()) {
 		$uf = base_Constant::URL_FORMAT;
-		$url=rtrim($route,base_Constant::URL_FORMAT);
-		if(!empty($params)) {			
-			$sux = '.'.base_Constant::URL_SUFFIX;
-			foreach($params as $key=>$value) {
-				if (trim($value) != '') {
-					$tmp.= $key.$uf.$value.$uf;
+		$url = rtrim ( $route, base_Constant::URL_FORMAT );
+		if (! empty ( $params )) {
+			$sux = '.' . base_Constant::URL_SUFFIX;
+			foreach ( $params as $key => $value ) {
+				if (trim ( $value ) != '') {
+					$tmp .= $key . $uf . $value . $uf;
 				}
 			}
-			$tmp = rtrim($tmp,$uf);
-			$url=rtrim($url.base_Constant::URL_FORMAT.$tmp,base_Constant::URL_FORMAT);
+			$tmp = rtrim ( $tmp, $uf );
+			$url = rtrim ( $url . base_Constant::URL_FORMAT . $tmp, base_Constant::URL_FORMAT );
 		}
-		if (substr($url, -1) != '/'){//以'/'结束的url不加$sux;
-			$url = $route==='' ? $url : $url.$sux;
+		if (substr ( $url, - 1 ) != '/') { //以'/'结束的url不加$sux;
+			$url = $route === '' ? $url : $url . $sux;
 		}
-		if(!base_Constant::REWRITE){
-			$url = "index.php/c/".$url;
+		if (! base_Constant::REWRITE) {
+			$url = "index.php/c/" . $url;
 		}
 		return $url;
 	}
@@ -118,7 +122,7 @@ class base_c extends SGui {
 		$params ['second'] = $second;
 		$params ['state'] = $state;
 		echo $this->render ( 'common/showmsg.html', $params );
-		exit;
+		exit ();
 	}
 	/**
 	 * 分页

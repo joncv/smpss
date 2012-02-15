@@ -1,7 +1,7 @@
 <?php
 /**
  * 销售管理
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  *
  */
 class c_sale extends base_c {

@@ -1,7 +1,7 @@
 <?php
 /**
  * 通用异步请求控制器
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  */
 class c_ajax extends base_c {
 	

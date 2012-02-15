@@ -12,9 +12,9 @@ class base_m {
 	protected $_error = array ();
 	
 	function __construct($pkid = false) {
-		$this->_dbConfig = SDb::getConfig("default");
-		$this->_db = SDb::getDbEngine("pdo_mysql");
-		$this->_db->init($this->_dbConfig);
+		$this->_dbConfig = SDb::getConfig ( "default" );
+		$this->_db = SDb::getDbEngine ( "pdo_mysql" );
+		$this->_db->init ( $this->_dbConfig );
 		$this->_time = time ();
 		if ($pkid !== false) {
 			$this->setPkid ( $pkid );

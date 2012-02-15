@@ -1,7 +1,7 @@
 <?php 
 /**
  * 登录
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  *
  */
 class c_main extends base_c {
@@ -9,7 +9,8 @@ class c_main extends base_c {
 	function pageindex($inPath){
 		if(!$this->isLogin())
 			return $this->pagelogin($inPath);
-		return $this->render('main/index.html',$this->params);
+		$this->redirect($this->createUrl("/system/index"));
+		//return $this->render('main/index.html',$this->params);
 	}
 	
 	function pagelogin($inPath) {

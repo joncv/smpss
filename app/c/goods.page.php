@@ -1,7 +1,7 @@
 <?php
 /**
  * 商品管理
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  *
  */
 class c_goods extends base_c {
@@ -13,10 +13,13 @@ class c_goods extends base_c {
 		if (self::checkRights ( $inPath ) === false) {
 			//$this->ShowMsg("您无权操作！",$this->createUrl("/system/index"));
 		}
+		$this->params['inpath'] = $inPath;
+		$this->params ['head_title'] = "商品管理-" . $this->params ['head_title'];
 	}
 	
 	function pageindex($inPath) {
 		$url = $this->getUrlParams ( $inPath );
+		$page = $url['page']?(int)$url['page']:1;
 		$categoryObj = new m_category ();
 		$this->params['catelist'] = $categoryObj->getOrderCate('&nbsp;&nbsp;&nbsp;&nbsp;');
 		$condi = '';
@@ -34,7 +37,9 @@ class c_goods extends base_c {
 				 $condi = $condi ? $condi." and {$tableName}.cat_id = {$cat_id}" : "{$tableName}.cat_id = {$cat_id}";
 			}
 		}
-		$this->params['goods'] = $goodsObj->getGoodsList($condi);
+		$rs = $goodsObj->getGoodsList($condi,$page);
+		$this->params ['goods'] = $rs->items;
+		$this->params ['pagebar'] = $this->PageBar ( $rs->totalSize, base_Constant::PAGE_SIZE, $page, $inPath );
 		return $this->render ( 'goods/index.html', $this->params );
 	}
 	

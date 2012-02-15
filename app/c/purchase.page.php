@@ -1,7 +1,7 @@
 <?php
 /**
  * 进货管理
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  *
  */
 class c_purchase extends base_c {
@@ -13,36 +13,44 @@ class c_purchase extends base_c {
 		if (self::checkRights ( $inPath ) === false) {
 			//$this->ShowMsg("您无权操作！",$this->createUrl("/system/index"));
 		}
+		$this->params ['inpath'] = $inPath;
+		$this->params ['head_title'] = "进货管理-" . $this->params ['head_title'];
 	}
 	
 	function pageindex($inPath) {
 		$url = $this->getUrlParams ( $inPath );
-		$categoryObj = new m_category();
+		$page = $url ['page'] ? ( int ) $url ['page'] : 1;
+		$categoryObj = new m_category ();
 		$purchaseObj = new m_purchase ();
 		$condition = "isdel = 0";
-		if($_POST){
-			$key = base_Utils::getStr($_POST['key']);
-			$cat_id = (int)$_POST['cat_id'];
+		if ($_POST) {
+			$key = base_Utils::getStr ( $_POST ['key'] );
+			$cat_id = ( int ) $_POST ['cat_id'];
 			$condition .= " and goods_name like '%{$key}%' or goods_sn like '%{$key}%'";
-			if($cat_id){
-				$condition .= " and cat_id = {$cat_id}"; 
+			if ($cat_id) {
+				$condition .= " and cat_id = {$cat_id}";
 			}
-			$this->params['key'] = $key;
+			$this->params ['key'] = $key;
 		}
-		$this->params ['purchase'] = $purchaseObj->select ($condition)->items;
-		$this->params ['catelist'] = $categoryObj->getOrderCate('&nbsp;&nbsp;&nbsp;&nbsp;');
+		$purchaseObj->setCount ( true );
+		$purchaseObj->setPage ( $page );
+		$purchaseObj->setLimit ( base_Constant::PAGE_SIZE );
+		$purchase = $purchaseObj->select ( $condition );
+		$this->params ['purchase'] = $purchase->items;
+		$this->params ['pagebar'] = $this->PageBar ( $purchase->totalSize, base_Constant::PAGE_SIZE, $page, $inPath );
+		$this->params ['catelist'] = $categoryObj->getOrderCate ( '&nbsp;&nbsp;&nbsp;&nbsp;' );
 		return $this->render ( 'purchase/index.html', $this->params );
 	}
 	
 	function pagepurchase($inPath) {
 		$url = $this->getUrlParams ( $inPath );
-		$goods_id = $url['gid']?(int)$url['gid']:(int)$_POST['goods_id'];
+		$goods_id = $url ['gid'] ? ( int ) $url ['gid'] : ( int ) $_POST ['goods_id'];
 		$url ['ac'] = $url ['ac'] ? $url ['ac'] : "add";
 		switch ($url ['ac']) {
 			case "add" :
 				$purchaseObj = new m_purchase ( ( int ) $url ['id'] );
-				$goodsObj = base_mAPI::get ( "m_goods",$goods_id );
-				if($_POST){
+				$goodsObj = base_mAPI::get ( "m_goods", $goods_id );
+				if ($_POST) {
 					$goods_sn = base_Utils::getStr ( $_POST ['goods_sn'] );
 					$rs = $goodsObj->get ( "goods_sn = '{$goods_sn}'" );
 					if (! $rs)
@@ -57,10 +65,10 @@ class c_purchase extends base_c {
 					}
 					$this->ShowMsg ( "入库出错！原因：" . $purchaseObj->getError () );
 				}
-				if($url['id']){
-					$this->params['goods'] = $purchaseObj->get();
-				}else{
-					$this->params['goods'] = $goodsObj->get();
+				if ($url ['id']) {
+					$this->params ['goods'] = $purchaseObj->get ();
+				} else {
+					$this->params ['goods'] = $goodsObj->get ();
 				}
 				break;
 			case "del" :
@@ -72,7 +80,7 @@ class c_purchase extends base_c {
 				}
 				break;
 		}
-		$this->params['ac'] = $url['ac'];
+		$this->params ['ac'] = $url ['ac'];
 		return $this->render ( 'purchase/purchase.html', $this->params );
 	}
 }
