@@ -24,6 +24,9 @@ class SGui{
 	 * render a .tpl
 	 */
 	public function render($tpl,$parames=array()){
+		if(base_Constant::TEMP_DIR){
+			$tpl = base_Constant::TEMP_DIR.'/'.$tpl;
+		}
 		if(!self::$engine){
 			self::$engine = new Smarty;
 			self::$engine->plugins_dir = array(SMARTY_DIR."/plugins_slightphp/",SMARTY_DIR."/plugins/");
