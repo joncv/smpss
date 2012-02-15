@@ -48,8 +48,7 @@ class base_Utils {
 				$string [$key] = self::shtmlspecialchars ( $val );
 			}
 		} else {
-			$string = self::getStr($string,'html');
-			//$string = preg_replace ( '/&amp;((#(\d{3,5}|x[a-fA-F0-9]{4})|[a-zA-Z][a-z0-9]{2,5});)/', '&\\1', str_replace ( array ('&', '"', '<', '>' ), array ('&amp;', '&quot;', '&lt;', '&gt;' ), $string ) );
+			$string = self::getStr ( $string, 'html' );
 		}
 		return $string;
 	}
@@ -234,19 +233,6 @@ class base_Utils {
 	}
 	
 	/** 
-	 * IsUsername函数:检测是否符合用户名格式 
-	 * $Argv是要检测的用户名参数 
-	 * $RegExp是要进行检测的正则语句 
-	 * 返回值:符合用户名格式返回用户名,不是返回false 
-	 */
-	public static function IsUsername($Argv) {
-		$RegExp = '/^[a-z0-9_]{4,16}$/'; //由大小写字母跟数字下划线组成并且长度在4-16字符直接
-		$stara = substr ( $Argv, 0, 1 );
-		$sRegExp = '/^\d*$/'; //判断首字符是否为字母
-		return preg_match ( $RegExp, $Argv ) && ! preg_match ( $sRegExp, $stara ) ? true : false;
-	}
-	
-	/** 
 	 * IsMail函数:检测是否为正确的邮件格式 
 	 * 返回值:是正确的邮件格式返回邮件,不是返回false 
 	 */
@@ -290,148 +276,6 @@ class base_Utils {
 		return preg_match ( $RegExp, $Argv ) ? true : false;
 	}
 	
-	//验证身份证
-	public static function validation_filter_id_card($id_card) {
-		if (strlen ( $id_card ) == 18) {
-			return self::idcard_checksum18 ( $id_card );
-		} elseif ((strlen ( $id_card ) == 15)) {
-			$id_card = self::idcard_15to18 ( $id_card );
-			return self::idcard_checksum18 ( $id_card );
-		} elseif ($id_card == 'S7935588G') { //台湾
-			return true;
-		} elseif ((strlen ( $id_card )) == 10) {
-			return self::hkidcard ( $id_card );
-		} elseif ($id_card == '0442268402(B)') {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	// 计算身份证校验码，根据国家标准GB 11643-1999
-	function idcard_verify_number($idcard_base) {
-		if (strlen ( $idcard_base ) != 17) {
-			return false;
-		}
-		//加权因子
-		$factor = array (7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 );
-		//校验码对应值
-		$verify_number_list = array ('1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2' );
-		$checksum = 0;
-		for($i = 0; $i < strlen ( $idcard_base ); $i ++) {
-			$checksum += substr ( $idcard_base, $i, 1 ) * $factor [$i];
-		}
-		$mod = $checksum % 11;
-		$verify_number = $verify_number_list [$mod];
-		return $verify_number;
-	}
-	
-	// 将15位身份证升级到18位
-	function idcard_15to18($idcard) {
-		if (strlen ( $idcard ) != 15) {
-			return false;
-		} else {
-			// 如果身份证顺序码是996 997 998 999，这些是为百岁以上老人的特殊编码
-			if (array_search ( substr ( $idcard, 12, 3 ), array ('996', '997', '998', '999' ) ) !== false) {
-				$idcard = substr ( $idcard, 0, 6 ) . '18' . substr ( $idcard, 6, 9 );
-			} else {
-				$idcard = substr ( $idcard, 0, 6 ) . '19' . substr ( $idcard, 6, 9 );
-			}
-		}
-		$idcard = $idcard . self::idcard_verify_number ( $idcard );
-		return $idcard;
-	}
-	
-	// 18位身份证校验码有效性检查
-	function idcard_checksum18($idcard) {
-		if (strlen ( $idcard ) != 18) {
-			return false;
-		}
-		$idcard_base = substr ( $idcard, 0, 17 );
-		if (self::idcard_verify_number ( $idcard_base ) != strtoupper ( substr ( $idcard, 17, 1 ) )) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
-	//香港身份证号
-	function hkidcard($idcard) {
-		$firstStr = substr ( $idcard, 0, 1 );
-		$middleStr = substr ( $idcard, 1, - 3 );
-		$length = strlen ( $middleStr );
-		$rightSecondStr = substr ( $idcard, - 2, 1 );
-		$left = substr ( $idcard, - 3, 1 );
-		$right = substr ( $idcard, - 1, 1 );
-		$ord_firstStr = ord ( $firstStr );
-		$ord_rightSecondStr = ord ( $rightSecondStr );
-		$ord_left = ord ( $left );
-		$ord_right = ord ( $right );
-		if (($ord_firstStr > 90) || ($ord_firstStr < 65)) {
-			return false;
-		} else if (($ord_left != 40) or ($ord_right != 41)) {
-			return false;
-		} else if ($ord_rightSecondStr < 48 || $ord_rightSecondStr > 57) {
-			return false;
-		} else if (! is_numeric ( $middleStr )) {
-			return false;
-		} else if ($length != 6) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
-	//验证组织机构代码证
-	public static function checkOrgCode($str) {
-		$pattern = "/^[A-Za-z0-9]{8}-[A-Za-z0-9]{1}/"; //组织机构代码，8位数字或字母加上一个"-"再加一位数字或字母
-		if (preg_match ( $pattern, $str )) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	/**
-	 * 时间差转为X天X小时X分X秒等形式
-	 * @param $int $intervalTime
-	 * @param $accuracy  day精确到天 hour精确到小时 minute精确到分 second精确到秒,max精确在最大一个有数据的值
-	 */
-	public static function intervalTime2str($intervalTime, $accuracy = "hour") {
-		$intervalTime = $intervalTime > 0 ? $intervalTime : 0;
-		$day = floor ( $intervalTime / 86400 );
-		$hour = floor ( ($intervalTime - 86400 * $day) / 3600 );
-		$minute = floor ( (($intervalTime - 86400 * $day) - 3600 * $hour) / 60 );
-		$second = floor ( (($intervalTime - 86400 * $day) - 3600 * $hour) - 60 * $minute );
-		$str = "";
-		$s_day = ($day > 0) ? $day . "天" : "";
-		$s_hour = ($hour > 0) ? $hour . "小时" : "";
-		$s_minute = ($minute > 0) ? $minute . "分" : "";
-		$s_second = ($second > 0) ? $second . "秒" : "";
-		if ($accuracy == "day") {
-			return $s_day;
-		}
-		if ($accuracy == "hour") {
-			return $s_day . $s_hour;
-		}
-		if ($accuracy == "minute") {
-			return $s_day . $s_hour . $s_minute;
-		}
-		if ($accuracy == "second") {
-			return $s_day . $s_hour . $s_minute . $s_second;
-		}
-		if ($accuracy == "max") {
-			if ($s_day != "")
-				return $s_day;
-			if ($s_hour != "")
-				return $s_hour;
-			if ($s_minute != "")
-				return $s_minute;
-			if ($s_second != "")
-				return $s_second;
-		}
-	}
-	
 	function isNumber($val) {
 		if (preg_match ( "/^[0-9]+$/", $val ))
 			return true;
@@ -458,16 +302,6 @@ class base_Utils {
 	
 	public static function isIp($val) {
 		return ( bool ) ip2long ( $val );
-	}
-	
-	/**
-	 * 去掉UBB标签,返回指定长度字符
-	 */
-	public function getUbbStr($string, $strlen) {
-		$string = str_replace ( "\n", "", $string );
-		$string = str_replace ( "\r", "", $string );
-		$string = preg_replace ( "/\[.*\](.*)\[.*\]/i", "$1", $string );
-		return self::cutstr ( $string, $strlen ) . '...';
 	}
 	
 	/**

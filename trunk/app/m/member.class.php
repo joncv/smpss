@@ -1,7 +1,7 @@
 <?php
 /**
  * 会员主表数据模型
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  */
 class m_member extends base_m {
 	public function primarykey() {

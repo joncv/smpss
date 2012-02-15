@@ -1,10 +1,9 @@
 <?php
 /**
  * 模型对外接口
- * 保证相同模型不重复创建
  */
 class base_mAPI {
-	private static $_model = array ();//存储已创建的模型
+	private static $_model = array (); //存储已创建的模型
 	/**
 	 * 获取数据模型
 	 * @param string $name 获取模型的名称，例如:mk_task

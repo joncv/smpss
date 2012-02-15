@@ -1,7 +1,7 @@
 <?php
 /**
  * 商品表数据模型
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  */
 class m_goods extends base_m {
 	public function primarykey() {
@@ -14,10 +14,13 @@ class m_goods extends base_m {
 		return array ();
 	}
 	
-	public function getGoodsList($condition = '') {
+	public function getGoodsList($condition = '', $page = 1) {
+		$this->setCount ( true );
+		$this->setPage ( $page );
+		$this->setLimit ( base_Constant::PAGE_SIZE );
 		$goodsTableName = $this->tableName ();
 		$cateTableName = base_Constant::TABLE_PREFIX . 'category';
-		$rs = $this->select ( $condition, "{$goodsTableName}.*,{$cateTableName}.cat_name", "", "", array ("{$cateTableName}" => "{$goodsTableName}.cat_id={$cateTableName}.cat_id" ) )->items;
+		$rs = $this->select ( $condition, "{$goodsTableName}.*,{$cateTableName}.cat_name", "", "", array ("{$cateTableName}" => "{$goodsTableName}.cat_id={$cateTableName}.cat_id" ) );
 		if ($rs)
 			return $rs;
 		return array ();

@@ -1,22 +1,27 @@
 <?php
 /**
  * 分类表数据模型
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  */
-class m_category extends base_m{
-	public function primarykey(){
+class m_category extends base_m {
+	public function primarykey() {
 		return 'cat_id';
 	}
-	public function tableName(){
-		return base_Constant::TABLE_PREFIX.'category';
+	public function tableName() {
+		return base_Constant::TABLE_PREFIX . 'category';
 	}
-	public function relations(){
-		return array();
+	public function relations() {
+		return array ();
 	}
-	public function getOrderCate($space='|___'){
-		$values = $this->select()->items;
-		if($values){
-			$tree = new base_tree();
+	public function getOrderCate($space = '|___') {
+		//$this->setCount ( true );
+		//$this->setPage ( $page );
+		//$this->setLimit ( base_Constant::PAGE_SIZE );
+		$values = $this->select ();
+		//$listarr[100]['totalSize'] = $values->totalSize; 
+		$values = $values->items;
+		if ($values) {
+			$tree = new base_tree ();
 			$miniupid = $delbase = '';
 			$listarr = $categoryarr = array ();
 			foreach ( $values as $value ) {
@@ -32,20 +37,21 @@ class m_category extends base_m{
 			}
 			return $listarr;
 		}
-		return array();
+		return array ();
 	}
-	public function create($data){
-		$data['pid'] = $data['pid']?$data['pid']:0;
-		if(!$data['cat_name']){
-			$this->setError(0,"缺少必要参数");
+	public function create($data) {
+		$data ['pid'] = $data ['pid'] ? $data ['pid'] : 0;
+		if (! $data ['cat_name']) {
+			$this->setError ( 0, "缺少必要参数" );
 			return false;
 		}
-		$this->set("pid", $data['pid']);
-		$this->set("is_show", $data['is_show']);
-		$this->set("cat_name", $data['cat_name']);
-		$rs = $this->save($data['cat_id']);
-		if($rs) return $rs;
-		$this->setError(0,"保存数据失败".$this->getError());
+		$this->set ( "pid", $data ['pid'] );
+		$this->set ( "is_show", $data ['is_show'] );
+		$this->set ( "cat_name", $data ['cat_name'] );
+		$rs = $this->save ( $data ['cat_id'] );
+		if ($rs)
+			return $rs;
+		$this->setError ( 0, "保存数据失败" . $this->getError () );
 		return false;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
  * 销售管理
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  *
  */
 class c_sales extends base_c {
@@ -13,11 +13,39 @@ class c_sales extends base_c {
 		if (self::checkRights ( $inPath ) === false) {
 			//$this->ShowMsg("您无权操作！",$this->createUrl("/system/index"));
 		}
+		$this->params ['inpath'] = $inPath;
+		$this->params ['head_title'] = "销售管理-" . $this->params ['head_title'];
 	}
 	
 	function pageindex($inPath) {
 		$url = $this->getUrlParams ( $inPath );
-		return $this->render ( 'sale/index.html', $this->params );
+		$page = $url ['page'] ? ( int ) $url ['page'] : 1;
+		$ymd = date ( "Y-m-d", time () );
+		$condi = '';
+		if ($_POST) {
+			$key = base_Utils::getStr ( $_POST ['key'] );
+			$stime = base_Utils::getStr ( $_POST ['stime'] );
+			$etime = base_Utils::getStr ( $_POST ['etime'] );
+			if ($key) {
+				$condi = "order_id ='{$key}' or goods_name like '%{$key}%' or realname like '%{$key}%' or membercardid ='{$key}'";
+			}
+			if ($stime) {
+				$etime = $etime ? $etime : $ymd;
+				$condi = $condi ? $condi . " and" : "";
+				$condi .= " dateymd between '{$stime}' and '{$etime}'";
+			}
+		}
+		$saleObj = new m_sales ();
+		$saleObj->setCount ( true );
+		$saleObj->setPage ( $page );
+		$saleObj->setLimit ( base_Constant::PAGE_SIZE );
+		$rs = $saleObj->select ( $condi );
+		$this->params ['sales'] = $rs->items;
+		$this->params ['key'] = $key;
+		$this->params ['stime'] = $stime;
+		$this->params ['etime'] = $etime;
+		$this->params ['pagebar'] = $this->PageBar ( $rs->totalSize, base_Constant::PAGE_SIZE, $page, $inPath );
+		return $this->render ( 'sales/index.html', $this->params );
 	}
 	
 	function pagesales($inPath) {
@@ -68,10 +96,11 @@ class c_sales extends base_c {
 		$this->params ['discount'] = $discount;
 		$this->params ['info'] = $info;
 		//print_r($info);
-		return $this->render ( 'sale/sales.html', $this->params );
+		return $this->render ( 'sales/sales.html', $this->params );
 	}
 	
 	function pageOut($inPath) {
+		return $this->render ( 'sales/out.html', $this->params );
 		session_start ();
 		$info = $_SESSION ['goodsInfo'];
 		if (! is_array ( $info ))
@@ -135,7 +164,7 @@ class c_sales extends base_c {
 		$this->params ['pro_amount'] = $pro_amount;
 		$this->params ['mem_amount'] = $mem_amount;
 		$_SESSION ['goodsInfo'] = "";
-		return $this->render ( 'sale/out.html', $this->params );
+		return $this->render ( 'sales/out.html', $this->params );
 	}
 	/**
 	 * 处理退货
@@ -188,6 +217,6 @@ class c_sales extends base_c {
 			}
 			$this->params ['list'] = $salesObj->select ( "order_id='{$order_id}'" )->items;
 		}
-		return $this->render ( 'sale/return.html', $this->params );
+		return $this->render ( 'sales/return.html', $this->params );
 	}
 }

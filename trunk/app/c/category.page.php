@@ -1,7 +1,7 @@
 <?php
 /**
  * 分类管理
- * @author 齐迹  email:smpssadmin@gmail.com
+ * @author 齐迹  email:smpss2012@gmail.com
  *
  */
 class c_category extends base_c {
@@ -14,12 +14,15 @@ class c_category extends base_c {
 		if (self::checkRights ( $inPath ) === false) {
 			//$this->ShowMsg("您无权操作！",$this->createUrl("/system/index"));
 		}
+		$this->params ['inpath'] = $inPath;
+		$this->params ['head_title'] = "分类管理-" . $this->params ['head_title'];
 	}
 	
 	function pageindex($inPath) {
 		$url = $this->getUrlParams ( $inPath );
+		$page = $url ['page'] ? $url ['page'] : 1;
 		$categoryObj = new m_category ();
-		$this->params['category'] = $categoryObj->getOrderCate();
+		$this->params ['category'] = $categoryObj->getOrderCate ( $page );
 		return $this->render ( 'category/index.html', $this->params );
 	}
 	
@@ -27,7 +30,7 @@ class c_category extends base_c {
 		$url = $this->getUrlParams ( $inPath );
 		$catid = ( int ) $url ['catid'] > 0 ? ( int ) $url ['catid'] : ( int ) $_POST ['cat_id'];
 		$categoryObj = new m_category ( $catid );
-		$this->params['categorylist'] = $categoryObj->getOrderCate('&nbsp;&nbsp;&nbsp;&nbsp;');
+		$this->params ['categorylist'] = $categoryObj->getOrderCate ( '&nbsp;&nbsp;&nbsp;&nbsp;' );
 		if ($_POST) {
 			$post = base_Utils::shtmlspecialchars ( $_POST );
 			if ($catid) {
