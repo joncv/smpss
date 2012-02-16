@@ -17,13 +17,42 @@ class c_system extends base_c {
 		$this->params ['head_title'] = "系统-" . $this->params ['head_title'];
 	}
 	function pageindex($inPath) {
+		$this->params['system'] = $this->systemCount();
 		return $this->render ( 'system/index.html', $this->params );
 	}
 	
 	function pagesetting($inPath) {
-		//$action = array('all'=>0,'action'=>array('system_index','system_setting'),'menu'=>array('system'=>array('index'=>'系统信息','setting'=>'系统配置','rights'=>'权限配置')));
-		//echo serialize($action);
-		//var_dump($this->params);
+		$modelObj = new base_m ();
+		if(!$_POST){
+			$this->params ['system_name'] =base_Constant::DEFAULT_TITLE;
+			$this->params ['rewrite'] =(int)base_Constant::REWRITE;
+			$this->params ['cookie_key'] =base_Constant::COOKIE_KEY;
+			$this->params ['temp_dir'] =base_Constant::TEMP_DIR;
+		}else{
+			$constant = file_get_contents(ROOT_APP."/base/Constant.class.php");
+			$system_name = base_Utils::getStr($_POST['system_name']);
+			if($system_name){
+				$constant = str_replace(base_Constant::DEFAULT_TITLE, $system_name, $constant);
+			}
+			$cookie_key = md5(base_Utils::getStr($_POST['cookie_key']));
+			if($cookie_key){
+				$constant = str_replace(base_Constant::COOKIE_KEY, $cookie_key, $constant);
+			}
+			$rewrite = base_Utils::getStr($_POST['rewrite'],'int');
+			if($rewrite==1){
+				$constant = str_replace("FALSE", "TRUE", $constant);
+			}else{
+				$constant = str_replace("TRUE", "FALSE", $constant);
+			}
+			$f = @fopen(ROOT_APP."/base/Constant.class.php", "r+");
+			if($f){
+				fwrite($f, $constant);
+				fclose($f);
+			}else{
+				$this->ShowMsg("没有写权限");
+			}
+			$this->redirect($this->createUrl("/system/index"));
+		}
 		return $this->render ( 'system/setting.html', $this->params );
 	}
 	
@@ -93,6 +122,20 @@ class c_system extends base_c {
 			}
 		}
 		return serialize ( array ('all' => 0, 'action' => $action, 'menu' => $menu ) );
+	}
+	
+	private function systemCount() {
+		$modelObj = new base_m ();
+		$goodscount = $modelObj->_db->select ( base_Constant::TABLE_PREFIX . "goods", "", "count(1) as num" )->items; //商品总数
+		$goodsstock = $modelObj->_db->select ( base_Constant::TABLE_PREFIX . "goods", "stock<=warn_stock", "goods_id,goods_name,stock" )->items; //缺少库存的商品
+		$salesall = $modelObj->_db->select ( base_Constant::TABLE_PREFIX . "goods", "", "sum(countamount) as cm,sum(salesamount) as sm" )->items; // 总销售情况 和总的库存金额
+		$modelObj->_db->setLimit(8);
+		$salestop = $modelObj->_db->select ( base_Constant::TABLE_PREFIX . "sales", "", "sum( num ) AS a, goods_name,goods_id", "group by goods_id", "order by a desc" )->items; //销售排行榜
+		$arr ['goodscount'] = $goodscount [0] ['num'];
+		$arr ['goodsstock'] = $goodsstock;
+		$arr ['salestop'] = $salestop;
+		$arr ['salesall'] = $salesall [0];
+		return $arr;
 	}
 }
 ?>
