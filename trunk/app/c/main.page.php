@@ -16,12 +16,12 @@ class c_main extends base_c {
 	function pagelogin($inPath) {
 		$urlParams = $this->getUrlParams($inPath);
 		if(!$_POST){
-			$this->params['head_title'] = "smpss";
+			$this->params['head_title'] = "管理登录-".$this->params['head_title'];
 			return $this->render("main/login.html",$this->params);
 		}else{
 			$_POST = base_Utils::shtmlspecialchars($_POST);
-			session_start();
-			if(SCaptcha::check($_POST['captcha'])){
+			//session_start();
+			if(!SCaptcha::check($_POST['captcha'])){
 				$modelAdmin = new m_admin();
 				$loginInfo = $modelAdmin->checkLogin($_POST['username'],$_POST['pwd'],(int)$_POST['timeout']);
 				if($loginInfo){

@@ -108,7 +108,7 @@ class base_c extends SGui {
 			$url = $route === '' ? $url : $url . $sux;
 		}
 		if (! base_Constant::REWRITE) {
-			$url = "index.php/c/" . $url;
+			$url = "/index.php/c" . $url;
 		}
 		return $url;
 	}
@@ -151,22 +151,22 @@ class base_c extends SGui {
 		}
 		for($i = 0; $i < $pagenum; $i ++) {
 			$params ['pages'] [$i] ['page'] = $i + 1;
-			$params ['pages'] [$i] ['url'] = self::createUrl ( "{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $i + 1 ) ) ) . $getPath;
+			$params ['pages'] [$i] ['url'] = self::createUrl ( "/{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $i + 1 ) ) ) . $getPath;
 		}
-		$params ['first'] = self::createUrl ( "{$inPath[1]}/{$inPath[2]}", $pars ) . $getPath;
+		$params ['first'] = self::createUrl ( "/{$inPath[1]}/{$inPath[2]}", $pars ) . $getPath;
 		//仅提供给输页码跳转使用
-		$params ['gotobase'] = self::createUrl ( "{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => 1 ) ) ) . $getPath;
+		$params ['gotobase'] = self::createUrl ( "/{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => 1 ) ) ) . $getPath;
 		if (! empty ( $nextpg )) {
-			$params ['nextpg'] = self::createUrl ( "{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $nextpg ) ) ) . $getPath;
+			$params ['nextpg'] = self::createUrl ( "/{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $nextpg ) ) ) . $getPath;
 		} else {
 			$params ['nextpg'] = null;
 		}
 		if (! empty ( $prepg )) {
-			$params ['prepg'] = self::createUrl ( "{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $prepg ) ) ) . $getPath;
+			$params ['prepg'] = self::createUrl ( "/{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $prepg ) ) ) . $getPath;
 		} else {
 			$params ['prepg'] = null;
 		}
-		$params ['last'] = self::createUrl ( "{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $pagenum ) ) ) . $getPath;
+		$params ['last'] = self::createUrl ( "/{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $pagenum ) ) ) . $getPath;
 		$params ['startdata'] = $startdata;
 		$params ['enddata'] = $enddata;
 		$params ['currpage'] = $i_page;
@@ -190,9 +190,9 @@ class base_c extends SGui {
 		$pretenpg = $params ['start'] + 1 - 10;
 		$nexttenpg = $params ['start'] + $params ['max'] + 10;
 		if ($pretenpg >= 0)
-			$params ["pretenpg"] = self::createUrl ( "{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $pretenpg ) ) ) . $getPath;
+			$params ["pretenpg"] = self::createUrl ( "/{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $pretenpg ) ) ) . $getPath;
 		if ($nexttenpg <= $pagenum)
-			$params ["nexttenpg"] = self::createUrl ( "{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $nexttenpg ) ) ) . $getPath;
+			$params ["nexttenpg"] = self::createUrl ( "/{$inPath[1]}/{$inPath[2]}", array_merge ( $pars, array ($str_page => $nexttenpg ) ) ) . $getPath;
 		return $this->render ( "common/page/$style.html", $params );
 	}
 }
