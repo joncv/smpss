@@ -95,7 +95,7 @@ if(!$_POST){
                   <label><font class="red"> * </font>数据库名称</label>
                   <span>
                   <input type="text" value="<?php echo $iniArr['main']['database']; ?>" class="text-input small-input" name="database" />
-                  </span><br /><small>如果没有数据库请先建立一个数据库</small> </p>
+                  </span><br /><small>如果数据库不存在会自动创建！也可以选择一个已有的数据库</small> </p>
                 <p>
                   <label><font class="red"> * </font>数据库用户名</label>
                   <span>
