@@ -44,10 +44,10 @@
       </li>
 	{//if/}
 	{/if $menu.statistics/}
-      <li> <a href="javascript:;" class="nav-top-item {/if $inpath[1] eq "statistics"/}current{//if/}">出货管理</a>
+      <li> <a href="javascript:;" class="nav-top-item {/if $inpath[1] eq "statistics"/}current{//if/}">统计管理</a>
         <ul>
             {/foreach from=$menu.statistics item=items key=k/}
-            <li><a href="{/get_url rule='/statistics/'/}{/$k/}" class="{/$statistics.f/}">{/$items/}</a></li>
+            <li><a href="{/get_url rule='/statistics/'/}{/$k/}" class="{/if $inpath[2] eq $k/}current{//if/}">{/$items/}</a></li>
             {//foreach/}
         </ul>
       </li>

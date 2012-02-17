@@ -20,9 +20,9 @@
           <form id="js-form" method="post" action="/sales/index">
             <fieldset class="clearfix">
               <p>开始时间： <span>
-                <input type="text" value="{/$stime/}" class="text-input min-input" name="stime" />
+                <input type="text" value="{/$stime/}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="text-input min-input" name="stime" />
                 </span>&nbsp;结束时间： <span>
-                <input type="text" value="{/$etime/}" class="text-input min-input" name="etime" />
+                <input type="text" value="{/$etime/}" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="text-input min-input" name="etime" />
                 </span><small>(格式：2012-01-01)</small> </p>
               <p>关键字：<span>
                 <input type="text" value="{/$key/}" class="text-input small-input" name="key" />
