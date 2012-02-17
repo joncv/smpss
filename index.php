@@ -11,7 +11,7 @@ SDb::setConfigFile(ROOT_CONFIG. "/db.ini.php");
 if(($r=SlightPHP::run())===false){
 	header('HTTP/1.1 404 Not Found');
 	header('Status: 404 Not Found');
-	include './app/v/common/404.html';
+	include './app/v/'.base_Constant::TEMP_DIR.'/common/404.html';
 }else{
 	echo $r;exit;
 }

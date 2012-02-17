@@ -58,7 +58,7 @@ $(document).ready(function(){
 				var currentTab = $(this).attr('href'); // Set variable "currentTab" to the value of href of clicked tab
 				$(currentTab).siblings().hide(); // Hide all content divs
 				$(currentTab).show(); // Show the content div with the id equal to the id of clicked tab
-				return false; 
+				//return false; 
 			}
 		);
 

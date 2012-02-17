@@ -14,51 +14,63 @@
         <div class="notification information png_bg"> <a href="#" class="close"><img src="/assets/simpla/images/icons/cross_grey_small.png" title="关闭" alt="close" /></a>
           <div> 商品总数：{/$system.goodscount/} 。已经销售的总金额：{/$system.salesall.sm/}。库存商品总价：{/$system.salesall.cm/}</div>
         </div>
-          <table style="width:45%; float:left;">
-            <thead>
-              <tr>
-                <th colspan="2">销售排行</th>
-              </tr>
-              <tr>
-                <th>商品名称</th>
-                <th>销量</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/section loop=$system.salestop name=i/}
-              <tr>
-                <td>{/$system.salestop[i].goods_name/}</td>
-                <td>{/$system.salestop[i].a/}</td>
-              </tr>
-              {//section/}
-            </tbody>
-          </table>
-          <table style="width:45%; float:right;">
-            <thead>
-              <tr>
-                <th colspan="3">缺货的商品</th>
-              </tr>
-              <tr>
-                <th>商品名称</th>
-                <th>库存</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/section loop=$system.goodsstock name=i/}
-              <tr>
-                <td>{/$system.goodsstock[i].goods_name/}</td>
-                <td>{/$system.goodsstock[i].stock/}</td>
-                <td><a href="{/get_url rule="/purchase/purchase" data="id="|cat:$system.goodsstock[i].goods_id/}">入库</a></td>
-              </tr>
-              {/sectionelse/}
-              <tr>
-                <td colspan="3">暂无缺货商品</td>
-              </tr>
-              {//section/}
-            </tbody>
-          </table>
-          <div class="clear"></div>
+        <div class="content-box column-left">
+          <div class="content-box-header">
+            <h3 style="cursor: s-resize;">销售排行</h3>
+          </div>
+          <div class="content-box-content" style="display: block;">
+            <div class="tab-content default-tab" style="display: block;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>商品名称</th>
+                    <th>销量</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {/section loop=$system.salestop name=i/}
+                <tr>
+                  <td>{/$system.salestop[i].goods_name/}</td>
+                  <td>{/$system.salestop[i].a/}</td>
+                </tr>
+                {//section/}
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="content-box column-right">
+          <div class="content-box-header">
+            <h3 style="cursor: s-resize;">缺货的商品</h3>
+          </div>
+          <div class="content-box-content" style="display: block;">
+            <div class="tab-content default-tab" style="display: block;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>商品名称</th>
+                    <th>库存</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {/section loop=$system.goodsstock name=i/}
+                <tr>
+                  <td>{/$system.goodsstock[i].goods_name/}</td>
+                  <td>{/$system.goodsstock[i].stock/}</td>
+                  <td><a href="{/get_url rule="/purchase/purchase" data="id="|cat:$system.goodsstock[i].goods_id/}">入库</a></td>
+                </tr>
+                {/sectionelse/}
+                <tr>
+                  <td colspan="3">暂无缺货商品</td>
+                </tr>
+                {//section/}
+                  </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="clear"></div>
       </div>
     </div>
   </div>

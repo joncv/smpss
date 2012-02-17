@@ -100,7 +100,7 @@ class c_sales extends base_c {
 	}
 	
 	function pageOut($inPath) {
-		return $this->render ( 'sales/out.html', $this->params );
+		//return $this->render ( 'sales/out.html', $this->params );
 		session_start ();
 		$info = $_SESSION ['goodsInfo'];
 		if (! is_array ( $info ))
@@ -109,6 +109,7 @@ class c_sales extends base_c {
 		$sales = $mem_rs = array ();
 		$purchaseObj = new m_purchase ();
 		if ($info) {
+			$goodsObj = new m_goods();
 			$cardid = base_Utils::getStr ( $_POST ['cardid'] );
 			if ($cardid) {
 				$memberObj = new m_member ();
@@ -130,6 +131,7 @@ class c_sales extends base_c {
 				$sales ['goods_name'] = $v ['goods_name'];
 				$sales ['num'] = $v ['num'];
 				$sales ['out_price'] = $v ['out_price'];
+				$sales ['in_price'] = $goodsObj->getAvgPrice($v['goods_id']);
 				$sales ['p_discount'] = $v ['p_discount']; //促销优惠的金额
 				$sales ['price'] = $sales ['out_price'] - $sales ['p_discount'];
 				if ($v ['ismemberprice'] == 1 and $mem_rs ['mid']) {
@@ -206,6 +208,7 @@ class c_sales extends base_c {
 				//退货操作 1修改库存 2 修改商品销售总价 3更新会员卡积分
 				foreach ( $returnArr as $v ) {
 					if (! $purchaseObj->backStock ( $v ['goods_id'], $v ['num'], $v ['refund_amount'] )) {
+						$salesObj->update("order_id={$order_id} and goods_id = {$v['goods_id']}","refund_type={$v['refund_type']},refund_amount={$v['refund_amount']},refund_num={$v['num']}");
 						$this->ShowMsg ( "商品{$v['goods_id']}退款出错" . $purchaseObj->getError () );
 					}
 				}

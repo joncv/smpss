@@ -128,4 +128,26 @@ class m_goods extends base_m {
 		}
 		return $data;
 	}
+	
+	/**
+	 * 计算商品平均进价
+	 * @param array 商品ID 数组 也可是单个ID
+	 */
+	function getAvgPrice($goods_ids) {
+		$avgrice = array ();
+		if (is_array ( $goods_ids )) {
+			$goods_ids = join(",", $goods_ids);
+			$rs = $this->select ( "goods_id in({$goods_ids})", "goods_id,stock,countamount" )->items;
+			if ($rs) {
+				foreach ( $rs as $k => $v ) {
+					$avgrice [$v ['goods_id']] = sprintf ( "%01.2f", $rs ['countamount'] / $rs ['stock'] );
+				}
+			}
+		} else {
+			$rs = $this->selectOne ( "goods_id={$goods_ids}", "stock,countamount" );
+			if ($rs)
+				return sprintf ( "%01.2f", $rs ['countamount'] / $rs ['stock'] );
+		}
+		return $avgrice;
+	}
 }
