@@ -1,8 +1,0 @@
-<p>所有用户组</p>
-<div>
-	<ul>
-    {/section name=i loop=$group/}
-    	<li>{/$group[i].group_name/} <a href="{/get_url rule='/system/rights' data='gid='|cat:$group[i].gid/}">编辑权限</a></li>
-    {//section/}
-    </ul>
-</div>
