@@ -1,9 +1,25 @@
 <?php
 header("Content-type: text/html; charset=utf-8");
+if($_REQUEST['ac']=='db'){//异步创建数据库
+	$host = $_REQUEST['h'];
+	$user = $_REQUEST['u'];
+	$password = $_REQUEST['p'];
+	$database = $_REQUEST['d'];
+	$state=0;
+	$db = mysql_connect($host,$user,$password);
+	if(mysql_query("CREATE DATABASE {$database}",$db)){
+		$state=1;
+		$msg="创建数据库成功！";
+	}else{
+		$msg="创建数据库失败！".mysql_error();
+	}
+	echo json_encode(array("state"=>$state,"msg"=>$msg));
+	exit;
+}
 require_once("../global.php");
 require_once(ROOT_APP."/base/Constant.class.php");
 if (file_exists ( ROOT_APP . '/data/install.lock' )) {
-	echo '已经安装过程序了！如果要重新安装请先手动删除app/data/install.lock 文件！<a href="'.base_Constant::ROOT_DIR.'/index.php">到首页</a>';
+	echo '已经安装过程序了！如果要重新安装请先手动删除app/data/install.lock 文件！<a href="../index.php">到首页</a>';
 	exit ();
 }
 $title = base_Constant::DEFAULT_TITLE;
@@ -64,9 +80,10 @@ if(!$_POST){
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>安装-<?php echo $title ?></title>
-<link rel="stylesheet" href="/assets/simpla/css/reset.css" type="text/css" />
-<link rel="stylesheet" href="/assets/simpla/css/style.css" type="text/css" />
-<link rel="stylesheet" href="/assets/simpla/css/invalid.css" type="text/css" />
+<link rel="stylesheet" href="../assets/simpla/css/reset.css" type="text/css" />
+<link rel="stylesheet" href="../assets/simpla/css/style.css" type="text/css" />
+<link rel="stylesheet" href="../assets/simpla/css/invalid.css" type="text/css" />
+<script src="../assets/js/jquery.js"></script>
 </head>
 <body>
 <div id="body-wrapper">
@@ -90,23 +107,23 @@ if(!$_POST){
               <fieldset class="clearfix">
                   <label><font class="red"> * </font>数据库地址</label>
                   <span>
-                  <input type="text" value="<?php echo $iniArr['main']['host']; ?>" class="text-input small-input" name="host" />
+                  <input type="text" value="<?php echo $iniArr['main']['host']; ?>" class="text-input small-input" name="host" id="host" />
                   </span> </p>
-                <p>
-                  <label><font class="red"> * </font>数据库名称</label>
-                  <span>
-                  <input type="text" value="<?php echo $iniArr['main']['database']; ?>" class="text-input small-input" name="database" />
-                  </span><br /><small>如果数据库不存在会自动创建！也可以选择一个已有的数据库</small> </p>
                 <p>
                   <label><font class="red"> * </font>数据库用户名</label>
                   <span>
-                  <input type="text" value="<?php echo $iniArr['main']['user']; ?>" class="text-input small-input" name="user" />
+                  <input type="text" value="<?php echo $iniArr['main']['user']; ?>" class="text-input small-input" name="user" id="user" />
                   </span> </p>
                 <p>
                   <label><font class="red"> * </font>数据库密码</label>
                   <span>
-                  <input type="text" value="<?php echo $iniArr['main']['password']; ?>" class="text-input small-input" name="password" />
+                  <input type="text" value="<?php echo $iniArr['main']['password']; ?>" class="text-input small-input" name="password" id="password" />
                   </span> </p>
+                <p>
+                  <label><font class="red"> * </font>数据库名称</label>
+                  <span>
+                  <input type="text" value="<?php echo $iniArr['main']['database']; ?>" class="text-input small-input" name="database" id="database" />
+                  </span><input type="button" id="cdb" class="button" value="创建数据库" /><br /><small>可以选择一个已有的数据库</small> </p>
                 <p>
                   <label><font class="red"> * </font>管理员帐号</label>
                   <span>
@@ -130,5 +147,18 @@ if(!$_POST){
     <div id="footer"> <small> &#169; Copyright 2012-2013 <a href="mailto:smpss2012@gmail.com">齐迹</a> <a href="http://code.google.com/p/smpss/" target="_blank">Version:SmPSSv1.0 beta</a> | Template Powered by <a href="http://demo.ponjoh.com/Simpla-Admin/index.html" target="_blank">Simpla Admin</a> | <a href="#">Top</a> </small> </div>
   </div>
 </div>
+<script>
+$(document).ready(function($){
+	$("#cdb").click(function(){
+		var host = $("#host").val();
+		var user = $("#user").val();
+		var password = $("#password").val();
+		var database = $("#database").val();
+		$.post("?ac=db",{h:host,u:user,p:password,d:database},function(result){
+			alert(result.msg);
+		},"json");
+	});
+})
+</script>
 </body>
 </html>

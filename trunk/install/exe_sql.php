@@ -6,11 +6,11 @@ class exe_sql {
 	function __construct($database, $db) {
 		$this->db = $db;
 		if (! mysql_select_db ( $database, $this->db )) {
-			$database = "CREATE DATABASE {$database}";
-			if (! mysql_query ( $database, $this->db )) {
-				die ( "建立数据库失败！你的帐号无权创建数据库！请选择一个已有的数据库！" );
-			}
-			mysql_select_db ( $database, $this->db );
+			//$database = "CREATE DATABASE {$database}";
+			//if (! mysql_query ( $database, $this->db )) {
+				die ( "无法选择数据库，请检查是否已经创建数据库：{$database}！" );
+			//}
+			//mysql_select_db ( $database, $this->db );
 		}
 		$result = mysql_query ( "set names 'utf8'" );
 	}
@@ -38,7 +38,7 @@ class exe_sql {
 					continue;
 				}
 				if (! mysql_query ( $item, $this->db )) {
-					$this->seterr ( "SQL查询错误！".$item );
+					$this->seterr ( "SQL查询错误！".mysql_error() );
 					return false;
 				}
 			}
