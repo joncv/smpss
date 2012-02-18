@@ -25,7 +25,7 @@
                 <select id="one" name="cat_id">
                   <option value="0">-----选择分类-----</option>
             {/section name=i loop=$catelist/}
-                  <option value="{/$catelist[i].cat_id/}" {/if $catelist[i].cat_id eq $cat_id/}selected="selected"{//if/}>
+                  <option value="{/$catelist[i].cat_id/}" {/if $catelist[i].cat_id eq $goods.cat_id/}selected="selected"{//if/}>
                     {/$catelist[i].pre/}{/$catelist[i].cat_name/}
                   </option>
             {//section/}

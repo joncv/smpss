@@ -37,6 +37,23 @@ class c_member extends base_c {
 		return $this->render ( 'member/index.html', $this->params );
 	}
 	
+	function pagegroup($inPath){
+		$url = $this->getUrlParams ( $inPath );
+		$mbgroupObj = new m_mbgroup ($url['mgid']);
+		if($_POST){
+			$data = base_Utils::shtmlspecialchars ( $_POST );
+			$rs = $mbgroupObj -> creat($data);
+			if($rs){
+				$this->showMsg("操作成功",$this->createUrl ( "/member/group" ),2,1);
+			}else{
+				$this->showMsg("操作失败！".$mbgroupObj->getError());
+			}
+		}
+		$this -> params ['groupone'] = $mbgroupObj->get();
+		$this -> params ['group'] = $mbgroupObj->select()->items;
+		return $this->render ( 'member/group.html', $this->params );
+	}
+	
 	function pageaddmember($inPath) {
 		$url = $this->getUrlParams ( $inPath );
 		$mid = ( int ) $url ['mid'] > 0 ? ( int ) $url ['mid'] : ( int ) $_POST ['mid'];
@@ -58,6 +75,8 @@ class c_member extends base_c {
 			if ($mid) {
 				$this->params ['member'] = $memberObj->get ();
 			}
+			$mbgroupObj = new m_mbgroup ();
+			$this -> params ['group'] = $mbgroupObj->select()->items;
 			return $this->render ( 'member/addmember.html', $this->params );
 		}
 	}

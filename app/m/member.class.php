@@ -14,7 +14,7 @@ class m_member extends base_m {
 		return array ();
 	}
 	public function create($data) {
-		if (! $data ['realname'] and ! $data ['membercardid']) {
+		if (! $data ['realname'] or ! $data ['membercardid']) {
 			$this->setError ( 0, "缺少必要参数" );
 			return false;
 		}
