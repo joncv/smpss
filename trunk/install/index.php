@@ -1,8 +1,9 @@
 <?php
+header("Content-type: text/html; charset=utf-8");
 require_once("../global.php");
 require_once(ROOT_APP."/base/Constant.class.php");
 if (file_exists ( ROOT_APP . '/data/install.lock' )) {
-	echo '已经安装过程序了！如果要重新安装请先手动删除app/data/install.lock 文件！<a href="../index.php">到首页</a>';
+	echo '已经安装过程序了！如果要重新安装请先手动删除app/data/install.lock 文件！<a href="'.base_Constant::ROOT_DIR.'/index.php">到首页</a>';
 	exit ();
 }
 $title = base_Constant::DEFAULT_TITLE;

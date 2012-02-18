@@ -35,7 +35,7 @@ class c_purchase extends base_c {
 		$purchaseObj->setCount ( true );
 		$purchaseObj->setPage ( $page );
 		$purchaseObj->setLimit ( base_Constant::PAGE_SIZE );
-		$purchase = $purchaseObj->select ( $condition );
+		$purchase = $purchaseObj->select ( $condition, "", "", "order by id desc" );
 		$this->params ['purchase'] = $purchase->items;
 		$this->params ['pagebar'] = $this->PageBar ( $purchase->totalSize, base_Constant::PAGE_SIZE, $page, $inPath );
 		$this->params ['catelist'] = $categoryObj->getOrderCate ( '&nbsp;&nbsp;&nbsp;&nbsp;' );
@@ -59,6 +59,9 @@ class c_purchase extends base_c {
 					$data ['goods_sn'] = $rs ['goods_sn'];
 					$data ['in_num'] = ( float ) $_POST ['in_num'];
 					$data ['in_price'] = ( float ) $_POST ['in_price'];
+					if (!$data ['in_num'] or !$data ['in_price']){
+						$this->showMsg("数量和单价不能够为空！");
+					}
 					$data ['content'] = base_Utils::getStr ( $_POST ['content'] );
 					if ($purchaseObj->create ( $data )) {
 						$this->ShowMsg ( "入库成功！", $this->createUrl ( "/purchase/index" ), 2, 1 );

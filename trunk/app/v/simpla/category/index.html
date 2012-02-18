@@ -31,7 +31,7 @@
             {/section name=i loop=$category/}
             <tr>
               <td>{/$category[i].pre/}{/$category[i].cat_name/}</td>
-              <td><a href="{/get_url rule='/category/category' data='catid='|cat:$category[i].cat_id/}" title="编辑"><img src="/assets/simpla/images/icons/pencil.png" alt="编辑" /></a></td>
+              <td><a href="{/get_url rule='/category/category' data='catid='|cat:$category[i].cat_id/}" title="编辑"><img src="{/$root_dir/}/assets/simpla/images/icons/pencil.png" alt="编辑" /></a></td>
             </tr>
             {//section/}
             </tbody>

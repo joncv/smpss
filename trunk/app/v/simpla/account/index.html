@@ -29,7 +29,7 @@
           <tr>
             <td>{/$account[i].admin_name/}</td>
             <td>{/$account[i].group_name/}</td>
-            <td><a href="{/get_url rule='/account/index' data='aid='|cat:$account[i].admin_id/}" title="编辑"><img src="/assets/simpla/images/icons/pencil.png" alt="编辑" /></a>&nbsp;<a href="{/get_url rule='/system/rights' data='gid='|cat:$account[i].gid/}" title="查看权限"><img src="/assets/simpla/images/icons/information.png" alt="查看权限" /></a></td>
+            <td><a href="{/get_url rule='/account/index' data='aid='|cat:$account[i].admin_id/}" title="编辑"><img src="{/$root_dir/}/assets/simpla/images/icons/pencil.png" alt="编辑" /></a>&nbsp;<a href="{/get_url rule='/system/rights' data='gid='|cat:$account[i].gid/}" title="查看权限"><img src="{/$root_dir/}/assets/simpla/images/icons/information.png" alt="查看权限" /></a></td>
           </tr>
           {//section/}
             </tbody>

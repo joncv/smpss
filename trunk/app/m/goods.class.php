@@ -20,7 +20,7 @@ class m_goods extends base_m {
 		$this->setLimit ( base_Constant::PAGE_SIZE );
 		$goodsTableName = $this->tableName ();
 		$cateTableName = base_Constant::TABLE_PREFIX . 'category';
-		$rs = $this->select ( $condition, "{$goodsTableName}.*,{$cateTableName}.cat_name", "", "", array ("{$cateTableName}" => "{$goodsTableName}.cat_id={$cateTableName}.cat_id" ) );
+		$rs = $this->select ( $condition, "{$goodsTableName}.*,{$cateTableName}.cat_name", "", "order by goods_id desc", array ("{$cateTableName}" => "{$goodsTableName}.cat_id={$cateTableName}.cat_id" ) );
 		if ($rs)
 			return $rs;
 		return array ();

@@ -61,7 +61,7 @@
                   <td>{/if $goods[i].stock gt $goods[i].warn_stock/}{/$goods[i].stock/}{/else/}<span class="red fb" title="低于最小库存">{/$goods[i].stock/}(缺)</span>{//if/}</td>  
                   <td><span class="red">{/$goods[i].countamount/}</span></td>
                   <td><span class="red">{/$goods[i].salesamount/}</span></td>
-                  <td><a href="{/get_url rule='/goods/addgoods' data='gid='|cat:$goods[i].goods_id/}" title="编辑"><img src="/assets/simpla/images/icons/pencil.png" alt="编辑" /></a>&nbsp;<a href="{/get_url rule='/purchase/purchase' data='gid='|cat:$goods[i].goods_id/}" title="入库"><img src="/assets/simpla/images/icons/hammer_screwdriver.png" alt="入库" /></a></td>
+                  <td><a href="{/get_url rule='/goods/addgoods' data='gid='|cat:$goods[i].goods_id/}" title="编辑"><img src="{/$root_dir/}/assets/simpla/images/icons/pencil.png" alt="编辑" /></a>&nbsp;<a href="{/get_url rule='/purchase/purchase' data='gid='|cat:$goods[i].goods_id/}" title="入库"><img src="{/$root_dir/}/assets/simpla/images/icons/hammer_screwdriver.png" alt="入库" /></a></td>
                 </tr>
                 {//section/}
             </tbody>

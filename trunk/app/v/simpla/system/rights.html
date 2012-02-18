@@ -22,7 +22,7 @@
           {/section name=i loop=$group/}
           <tr>
             <td>{/$group[i].group_name/}</td>
-            <td><a href="{/get_url rule='/system/rights' data='gid='|cat:$group[i].gid/}" title="编辑权限"><img src="/assets/simpla/images/icons/pencil.png" alt="编辑权限" /></a></td>
+            <td><a href="{/get_url rule='/system/rights' data='gid='|cat:$group[i].gid/}" title="编辑权限"><img src="{/$root_dir/}/assets/simpla/images/icons/pencil.png" alt="编辑权限" /></a></td>
           </tr>
           {//section/}
             </tbody>
