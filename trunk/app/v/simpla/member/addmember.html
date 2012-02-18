@@ -29,6 +29,13 @@
                   <span>
                   <input type="text" class="text-input small-input" name="membercardid" value="{/$member.membercardid/}" id="membercardid" />
                   </span> </p>
+                <p><font class="red"> * </font>用户组：<span>
+                  <select name="grade">
+                  {/section name=i loop=$group/}
+                    <option value="{/$group[i].mgid/}" {/if $group[i].mgid eq $member.grade/}selected="selected"{//if/}>{/$group[i].mgroup_name/}-{/$group[i].discount/}%</option>
+                    {//section/}
+                  </select>
+                  </span> </p>
                 <p>身份证号：
                   <span>
                   <input type="text" class="text-input small-input" name="cardid" value="{/$member.cardid/}" />
@@ -79,9 +86,48 @@
   </div>
   {/include file="simpla/common/copy.html"/} </div>
 {/include file="simpla/common/footer.html"/} 
-<script type="text/javascript" src="{/$root_dir/}/assets/js/g.js"></script> 
-<script type="text/javascript" src="{/$root_dir/}/assets/js/region.js"></script> 
+<script type="text/javascript" src="{/$root_dir/}/assets/js/g.js"></script>
 <script type="text/javascript">
+function getprovince(rid,pid) {
+	 $.ajax({
+		url:'{/$root_dir/}/ajax/getregion',
+		data:'exce=1&parent_id='+rid,
+		success:function(json) {
+			for(i=0;i<json.length;i++) {
+				if(json[i].region_id == pid) {
+					var slt;
+					slt = document.getElementById('province');
+					slt.options.add(new Option(json[i].region_name,json[i].region_id));
+					slt.options[slt.options.length-1].selected='selected';
+				} else {
+					slt = document.getElementById('province');
+					slt.options.add(new Option(json[i].region_name,json[i].region_id));
+				}
+			}
+		}
+	 });
+ }
+function getcity(rid,cid) {
+	 $.ajax({
+		url:'{/$root_dir/}/ajax/getregion',
+		data:'parent_id='+rid,
+		success:function(json) {
+			document.getElementById('city').options.length = 0;
+			document.getElementById('city').options.add(new Option('---请选择城市---',''));
+			for(i=0;i<json.length;i++) {
+				if(json[i].region_id == cid) {
+					var slt;
+					slt = document.getElementById('city');
+					slt.options.add(new Option(json[i].region_name,json[i].region_id));
+					slt.options[slt.options.length-1].selected='selected';
+				} else {
+					slt = document.getElementById('city');
+					slt.options.add(new Option(json[i].region_name,json[i].region_id));
+				}
+			}
+		}
+	 });
+}
 $(document).ready(function(){
 	getprovince('1','{/$member.prov_id/}');
 	{/if $member.prov_id/}

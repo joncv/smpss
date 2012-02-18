@@ -29,13 +29,20 @@ class c_system extends base_c {
 			$this->params ['cookie_key'] =base_Constant::COOKIE_KEY;
 			$this->params ['temp_dir'] =base_Constant::TEMP_DIR;
 		}else{
+			if($_POST['cleartable']==1){
+				$tableArr = array("category","goods","member","purchase","sales","log");
+				if(!$modelObj -> clearTable($tableArr)){
+					$this->showMsg("清空数据出错！原因:".$modelObj -> getError());
+				}
+			}
 			$constant = file_get_contents(ROOT_APP."/base/Constant.class.php");
 			$system_name = base_Utils::getStr($_POST['system_name']);
 			if($system_name){
 				$constant = str_replace(base_Constant::DEFAULT_TITLE, $system_name, $constant);
 			}
-			$cookie_key = md5(base_Utils::getStr($_POST['cookie_key']));
-			if($cookie_key){
+			$cookie_key = base_Utils::getStr($_POST['cookie_key']);
+			if($cookie_key != base_Constant::COOKIE_KEY){
+				$cookie_key = md5($cookie_key);
 				$constant = str_replace(base_Constant::COOKIE_KEY, $cookie_key, $constant);
 			}
 			$rewrite = base_Utils::getStr($_POST['rewrite'],'int');
@@ -51,7 +58,8 @@ class c_system extends base_c {
 			}else{
 				$this->ShowMsg("没有写权限");
 			}
-			$this->redirect($this->createUrl("/system/index"));
+			$this->showMsg("修改成功",$this->createUrl("/system/setting"),2,1);
+			//$this->redirect($this->createUrl("/system/setting"));
 		}
 		return $this->render ( 'system/setting.html', $this->params );
 	}
@@ -127,9 +135,9 @@ class c_system extends base_c {
 	private function systemCount() {
 		$modelObj = new base_m ();
 		$goodscount = $modelObj->_db->select ( base_Constant::TABLE_PREFIX . "goods", "", "count(1) as num" )->items; //商品总数
-		$goodsstock = $modelObj->_db->select ( base_Constant::TABLE_PREFIX . "goods", "stock<=warn_stock", "goods_id,goods_name,stock" )->items; //缺少库存的商品
 		$salesall = $modelObj->_db->select ( base_Constant::TABLE_PREFIX . "goods", "", "sum(countamount) as cm,sum(salesamount) as sm" )->items; // 总销售情况 和总的库存金额
 		$modelObj->_db->setLimit(8);
+		$goodsstock = $modelObj->_db->select ( base_Constant::TABLE_PREFIX . "goods", "stock<=warn_stock", "goods_id,goods_name,stock" )->items; //缺少库存的商品
 		$salestop = $modelObj->_db->select ( base_Constant::TABLE_PREFIX . "sales", "", "sum( num ) AS a, goods_name,goods_id", "group by goods_id", "order by a desc" )->items; //销售排行榜
 		$arr ['goodscount'] = $goodscount [0] ['num'];
 		$arr ['goodsstock'] = $goodsstock;

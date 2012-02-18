@@ -371,4 +371,16 @@ class base_m {
 	public function getTmpData() {
 		return $this->_dataTmp;
 	}
+	
+	/**
+	 * 清空表数据
+	 */
+	public function clearTable($tableArr=array()){
+		if(is_array($tableArr)){
+			foreach($tableArr as $t){
+				$this->_db->delete(base_Constant::TABLE_PREFIX.$t);
+			}
+		}
+		return true;
+	}
 }
