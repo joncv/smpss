@@ -123,6 +123,7 @@ class base_c extends SGui {
 		$params ['url'] = $backurl;
 		$params ['second'] = $second;
 		$params ['state'] = $state;
+		$params ['root_dir'] = $this->params ['root_dir'];
 		echo $this->render ( 'common/showmsg.html', $params );
 		exit ();
 	}
