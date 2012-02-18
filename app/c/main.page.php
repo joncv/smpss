@@ -7,6 +7,9 @@
 class c_main extends base_c {
 	
 	function pageindex($inPath){
+		if (!file_exists ( ROOT_APP . '/data/install.lock' )) {
+			$this->redirect("../install/index.php");
+		}
 		if(!$this->isLogin())
 			return $this->pagelogin($inPath);
 		$this->redirect($this->createUrl("/system/index"));

@@ -39,7 +39,7 @@ class c_sales extends base_c {
 		$saleObj->setCount ( true );
 		$saleObj->setPage ( $page );
 		$saleObj->setLimit ( base_Constant::PAGE_SIZE );
-		$rs = $saleObj->select ( $condi );
+		$rs = $saleObj->select ( $condi, "", "", "order by sid desc" );
 		$this->params ['sales'] = $rs->items;
 		$this->params ['key'] = $key;
 		$this->params ['stime'] = $stime;

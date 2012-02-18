@@ -10,6 +10,7 @@ class base_c extends SGui {
 		//define(DEBUG, 1);
 		$this->params ['_time'] = time ();
 		$this->params ['version'] = "SmPSS" . base_Constant::VERSION;
+		$this->params ['root_dir'] = base_Constant::ROOT_DIR ? '/' . trim ( base_Constant::ROOT_DIR, '/' ) : '' ;
 		self::getRights ();
 	}
 	
@@ -92,6 +93,7 @@ class base_c extends SGui {
 	 * 构建完整url
 	 */
 	public function createUrl($route, $params = array()) {
+		$root_dir = base_Constant::ROOT_DIR ? '/' . trim ( base_Constant::ROOT_DIR, '/' ) : '' ;
 		$uf = base_Constant::URL_FORMAT;
 		$url = rtrim ( $route, base_Constant::URL_FORMAT );
 		if (! empty ( $params )) {
@@ -108,9 +110,9 @@ class base_c extends SGui {
 			$url = $route === '' ? $url : $url . $sux;
 		}
 		if (! base_Constant::REWRITE) {
-			$url = "/index.php/c" . $url;
+			return $root_dir."/index.php/c" . $url;
 		}
-		return $url;
+		return $root_dir.$url;
 	}
 	
 	/**

@@ -62,7 +62,7 @@
             <td>{/$purchase[i].in_num/}</td>
             <td><span class="red fb">{/$purchase[i].in_num-$purchase[i].out_num/}</span></td>
             <td>{/$purchase[i].out_num/}</td>
-            <td>{/if $purchase[i].out_num eq 0/}<a onclick="return(confirm('只有入库错误的时候才使用，你确认入库错误?'))" href="{/get_url rule='/purchase/purchase' data='ac=del&gid='|cat:$purchase[i].id/}" title="删除"><img src="/assets/simpla/images/icons/cross.png" alt="删除" /></a>&nbsp;{//if/}<a href="{/get_url rule='/purchase/purchase' data='id='|cat:$purchase[i].goods_id/}" title="入库"><img src="/assets/simpla/images/icons/hammer_screwdriver.png" alt="入库" /></a></td>
+            <td>{/if $purchase[i].out_num eq 0/}<a onclick="return(confirm('只有入库错误的时候才使用，你确认入库错误?'))" href="{/get_url rule='/purchase/purchase' data='ac=del&gid='|cat:$purchase[i].id/}" title="删除"><img src="{/$root_dir/}/assets/simpla/images/icons/cross.png" alt="删除" /></a>&nbsp;{//if/}<a href="{/get_url rule='/purchase/purchase' data='id='|cat:$purchase[i].goods_id/}" title="入库"><img src="{/$root_dir/}/assets/simpla/images/icons/hammer_screwdriver.png" alt="入库" /></a></td>
           </tr>
           {//section/}
             </tbody>

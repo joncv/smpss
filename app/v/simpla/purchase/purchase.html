@@ -19,6 +19,7 @@
           <form action="{/get_url rule='/purchase/purchase' data="ac=$ac"/}" method="post" id="js-form">
             <fieldset class="clearfix">
             <input type="hidden" name="goods_id" value="{/$goods.goods_id/}" />
+                  {/if $goods.goods_name/}<p><label>商品名称：{/$goods.goods_name/}</label></p>{//if/}
                   <p><label><font class="red"> * </font>商品条形码：</label>
                     <input type="text" value="{/$goods.goods_sn/}" class="text-input small-input" name="goods_sn" id="goods_sn" /><span></span>
                     </p>
