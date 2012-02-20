@@ -1,15 +1,18 @@
 <?php
 /**
- * 转换ecshop数据插件
+ * 数据转换插件
  * @author 齐迹  email:smpss2012@gmail.com
  */
-class m_ecshop {
+class m_plugins {
 	public $_db;
 	protected $_time;
 	protected $_error = array ();
 	
-	function __construct() {
-		$this->_dbConfig = SDb::getConfig ( "ecshop" );
+	/**
+	 * @param string $dbini  在 config/db.ini.php中配置数据库连接
+	 */
+	function __construct($dbini) {
+		$this->_dbConfig = SDb::getConfig ( $dbini );
 		$this->_db = SDb::getDbEngine ( "pdo_mysql" );
 		$this->_db->init ( $this->_dbConfig );
 		$this->_time = time ();
