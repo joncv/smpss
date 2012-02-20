@@ -1,10 +1,10 @@
 <?php
 /**
- * ecshop数据转换插件
+ * 数据转换插件
  * @author 齐迹  email:smpss2012@gmail.com
  *
  */
-class c_ecshop extends base_c {
+class c_plugins extends base_c {
 	
 	function __construct($inPath) {
 		parent::__construct ();
@@ -12,17 +12,16 @@ class c_ecshop extends base_c {
 			$this->ShowMsg ( "请先登录！", $this->createUrl ( "/main/index" ) );
 		}
 		$this->params ['inpath'] = $inPath;
-		$this->params ['head_title'] = "Ecshop转换插件-" . $this->params ['head_title'];
 	}
 	
-	function pageindex($inPath){
+	function pageecshop($inPath){
 		//define(DEBUG,1);
 		$url = $this->getUrlParams ( $inPath );
 		$lastid = (int)$url['lastid']?(int)$url['lastid']:0;
 		if($_POST or $lastid>0){
 			$pre = base_Utils::getStr($_REQUEST['pre'])?base_Utils::getStr($_REQUEST['pre']):$url['pre'];
 			$num = (int)$_POST['num']?(int)$_POST['num']:$url['num'];
-			$ecshop = new m_ecshop();
+			$ecshop = new m_plugins("ecshop");
 			$ecshop->_db->setLimit($num);
 			$categoryObj = new m_category();
 			$goodsObj = new m_goods();
@@ -45,9 +44,9 @@ class c_ecshop extends base_c {
 						}
 						$lastid = $k['cat_id'];
 					}
-					$this->showMsg("转换{$num}条完成！",$this->createUrl ( "/ecshop/index", array("lastid"=>$lastid,"num"=>$num,"type"=>1) )."?pre={$pre}",2,1);
+					$this->showMsg("转换{$num}条完成！",$this->createUrl ( "/plugins/ecshop", array("lastid"=>$lastid,"num"=>$num,"type"=>1) )."?pre={$pre}",2,1);
 				}else{
-					$this->showMsg("转换完成",$this->createUrl ( "/ecshop/index" ),2222,1);
+					$this->showMsg("转换完成",$this->createUrl ( "/plugins/ecshop" ),5,1);
 				}
 			}else{
 				$table = $pre ."goods";
@@ -80,13 +79,13 @@ class c_ecshop extends base_c {
 						$i++;
 						$lastid = $k['goods_id'];
 					}
-					$this->showMsg("共转换{$i}条数据，失败或者重复商品{$j}条！",$this->createUrl ( "/ecshop/index", array("lastid"=>$lastid,"num"=>$num,"type"=>2) )."?pre={$pre}",2,1);
+					$this->showMsg("共转换{$i}条数据，失败或者重复商品{$j}条！",$this->createUrl ( "/plugins/ecshop", array("lastid"=>$lastid,"num"=>$num,"type"=>2) )."?pre={$pre}",2,1);
 				}else{
-					$this->showMsg("转换商品完成",$this->createUrl ( "/ecshop/index" ),555,1);
+					$this->showMsg("转换商品完成",$this->createUrl ( "/plugins/ecshop" ),5,1);
 				}
 			}
-			
 		}
-		return $this->render ( 'ecshop/index.html', $this->params );
+		$this->params ['head_title'] = "Ecshop转换插件-" . $this->params ['head_title'];
+		return $this->render ( 'plugins/ecshop/index.html', $this->params );
 	}
 }
