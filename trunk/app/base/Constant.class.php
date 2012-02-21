@@ -13,7 +13,5 @@ class base_Constant {
 	const TEMP_DIR = "simpla"; //模版目录
 	const DEFAULT_TITLE = "超市进销存管理系统SmPSSv1.0"; //默认网站标题
 	const VERSION = "v1.0 beta";
+	const BARCODE = "69099999";//条形码1-8位 对于没有条形码的商品我们默认分配的代码
 }
-?>
-
-
