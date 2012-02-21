@@ -33,8 +33,8 @@
                 <span></span> </p>
               <p>
                 <label><font class="red"> * </font>商品条形码：</label>
-                <input type="text" value="{/$goods.goods_sn/}" class="text-input min-input" name="goods_sn" id="goods_sn" />
-                <span></span> </p>
+                <input type="text" value="{/$goods.goods_sn/}" class="text-input small-input" name="goods_sn" id="goods_sn" />
+                <span></span><input type="button" id="getbarcode" class="button" value="生成条形码" /> &nbsp;<a id="img" style="display:none" href="" target="_blank">查看条形码</a></p>
               <p>
                 <label><font class="red"> * </font>商品名称：</label>
                 <input type="text" value="{/$goods.goods_name/}" class="text-input small-input" name="goods_name" id="goods_name" />
@@ -117,5 +117,16 @@
 				$(".promote").hide();
 			}
 		});
+		$("#getbarcode").click(function(){
+			$.post("{/$root_dir/}/ajax/getbarcode",{},function(result){
+				if(result){
+					$("#goods_sn").val(result.code);
+					$("#img").show();
+					$("#img").attr("href",result.imgsrc);
+				}else{
+					alert("生成出错！");
+				}
+			},"json")
+		})
     });
 </script>

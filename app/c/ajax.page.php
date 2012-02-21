@@ -3,7 +3,7 @@
  * 通用异步请求控制器
  * @author 齐迹  email:smpss2012@gmail.com
  */
-class c_ajax extends base_c {
+class c_ajax extends base_c{
 	
 	public function pagegetregion() {
 		$aJson = array ();
@@ -35,5 +35,27 @@ class c_ajax extends base_c {
 			}
 		}
 	}
-
+	/**
+	 * 生成条形码图片
+	 * @param array $inPath
+	 */
+	public function pagebarcode($inPath){
+		$code = $_REQUEST['code'];
+		$SBarcode = new SBarcode();
+		$SBarcode->genBarCode($code,'png','2','');
+	}
+	/**
+	 * 随机生成一组条形码
+	 */
+	public function pagegetbarcode($inPath){
+		$code = base_Constant::BARCODE.base_Utils::random(4,1);
+		$SBarcode = new SBarcode();
+		$code = $SBarcode->_ean13CheckDigit($code);
+		if(strlen($code)==13){
+			$imgsrc = $this->createUrl("/ajax/barcode")."?code={$code}";
+			return json_encode(array("code"=>$code,"imgsrc"=>$imgsrc));
+		}else{
+			return $this->pagegetbarcode($inPath);
+		}
+	}
 }
