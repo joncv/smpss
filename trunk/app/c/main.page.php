@@ -41,7 +41,7 @@ class c_main extends base_c {
 	function pagelogout($inPath) {
 		$cookie['key'] = '';
 		base_Utils::ssetcookie($cookie,-1);
-		return $this->ShowMsg("成功退出！",'','','1');
+		return $this->ShowMsg("成功退出！",$this->createUrl('/main/index'),2,1);
 	}
 	
 	function pagecaptcha(){
