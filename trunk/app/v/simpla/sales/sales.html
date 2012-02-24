@@ -22,7 +22,7 @@
                 <p>
                   <label class="w80"><font class="red"> * </font>商品条形码：</label>
                   <span>
-                  <input type="text" value="" class="text-input small-input" name="goods_sn" />
+                  <input type="text" value="" class="text-input small-input" name="goods_sn" id="goods_sn" />
                   </span> </p>
                 <p>
                   <label class="w80"><font class="red"> * </font>数量：</label>
@@ -71,7 +71,7 @@
             </tbody>
         </table>
         <div class="form">
-          <form action="{/get_url rule='/sales/out'/}" method="post" id="js-form2">
+          <form action="{/get_url rule='/sales/out' data="oid=$order_id"/}" method="post" id="js-form2">
             <fieldset class="clearfix">
                 <p>
                   <label class="w80">会员卡号：</label>
