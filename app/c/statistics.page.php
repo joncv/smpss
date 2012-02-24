@@ -45,24 +45,43 @@ class c_statistics extends base_c {
 				case 4 :
 					break;
 			}
-			$line = '';
-			if (is_array ( $rs )) {
-				foreach ( $rs as $k => $v ) {
-					$line .= "['{$v['dateymd']}', {$v['money']}],";
-				}
-			} else {
-				$this->params ['null'] = "没有相关数据";
-			}
 			$this->params ['start'] = $start;
 			$this->params ['end'] = $end;
 			$this->params ['type'] = $type;
-			$this->params ['line'] = rtrim ( $line, ',' );
+			$this->params ['line'] = $this->linedata($rs);
 		}
 		return $this->render ( 'statistics/index.html', $this->params );
 	}
 	
 	function pagesales($inPath){
-		
+		$ymd = date ( 'Y-m-d', time () );
+		if ($_POST) {
+			$purchaseObj = new m_purchase();
+			$condi = '';
+			$start = base_Utils::getStr ( $_POST ['start'] );
+			$end = base_Utils::getStr ( $_POST ['end'] );
+			if ($start) {
+				$condi = "dateymd>={$start}";
+				$condi .= $end ? " and dateymd<={$end}" : " and dateymd<={$ymd}";
+			}
+			$this->params ['title'] = "进货统计";
+			$rs = $purchaseObj->select ( $condi, "dateymd,sum(in_num*in_price) as money", "group by dateymd" )->items;
+			$this->params ['start'] = $start;
+			$this->params ['end'] = $end;
+			$this->params ['line'] = $this->linedata($rs);
+		}
 		return $this->render ( 'statistics/sales.html', $this->params );
 	}
+	
+	private function linedata($arr){
+		if (!is_array ( $arr )) {
+			$this->params ['null'] = "没有相关数据";
+			return '';
+		}
+		$line ='';
+		foreach ( $arr as $k => $v ) {
+			$line .= "['{$v['dateymd']}', {$v['money']}],";
+		}
+		return  rtrim ( $line, ',' );
+	} 
 }

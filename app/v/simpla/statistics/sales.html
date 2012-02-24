@@ -47,21 +47,14 @@ $(document).ready(function(){
 {//if/}
     <div class="content-box-content">
       <div class="tab-content default-tab" id="tab1">
-      	<!--<div class="form">
+      	<div class="form">
             <form action="{/get_url rule='/statistics/sales'/}" method="post" id="js-form">
                 <fieldset class="clearfix">
-               	  <p>时间：<input type="text"  name="start" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  class="text-input min-input" value="{/$start/}"/>--<input type="text"  name="end" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  class="text-input min-input" value="{/$end/}"/>&nbsp;<select name="type">
-                	  <option value="1" {/if $type eq 1/}selected="selected"{//if/}>销售情况统计</option>
-                      <option value="2" {/if $type eq 2/}selected="selected"{//if/}>退货统计</option>
-                	  <option value="3" {/if $type eq 3/}selected="selected"{//if/}>销售利润统计</option>
-               	  </select>&nbsp;<input type="submit" name="" class="button" id="button" value=" 提交 " /></p>
+               	  <p>时间：<input type="text"  name="start" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  class="text-input min-input" value="{/$start/}"/>--<input type="text"  name="end" onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"  class="text-input min-input" value="{/$end/}"/>&nbsp;<input type="submit" name="" class="button" id="button" value=" 查询 " /></p>
                 </fieldset>
             </form>
-        </div>-->
-        <div class="notification information png_bg">
-			<div>开发完善中。。。</div>
-		</div>
-        <!--<div id="chart1" style="height:400px; width:100%;"></div>-->
+        </div>
+        <div id="chart1" style="height:400px; width:100%;"></div>
       </div>
     </div>
   </div>
