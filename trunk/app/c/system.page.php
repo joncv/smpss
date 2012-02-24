@@ -115,6 +115,33 @@ class c_system extends base_c {
 		}
 	}
 	
+	function pagelog($inPath){
+		$url = $this->getUrlParams ( $inPath );
+		$page = $url ['page'] ? ( int ) $url ['page'] : 1;
+		$type = ( int ) $url ['type'];
+		$ymd = date ( "Y-m-d", time () );
+		$condi = "type={$type}";
+		if ($_POST) {
+			$stime = base_Utils::getStr ( $_POST ['stime'] );
+			$etime = base_Utils::getStr ( $_POST ['etime'] );
+			if ($stime) {
+				$etime = $etime ? $etime : $ymd;
+				$condi .= " and dateymd between '{$stime}' and '{$etime}'";
+			}
+		}
+		$logObj = new m_log();
+		$logObj->setCount ( true );
+		$logObj->setPage ( $page );
+		$logObj->setLimit ( base_Constant::PAGE_SIZE );
+		$rs = $logObj->select ( $condi, "", "", "order by log_id desc" );
+		$this->params ['log'] = $rs->items;
+		$this->params ['stime'] = $stime;
+		$this->params ['etime'] = $etime;
+		$this->params ['type'] = $type;
+		$this->params ['pagebar'] = $this->PageBar ( $rs->totalSize, base_Constant::PAGE_SIZE, $page, $inPath );
+		return $this->render ( 'system/log.html', $this->params );
+	}
+	
 	private function creatRights($post) {
 		$post = ( array ) base_Utils::shtmlspecialchars ( $post );
 		$action = $menu = array ();

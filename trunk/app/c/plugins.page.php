@@ -14,6 +14,10 @@ class c_plugins extends base_c {
 		$this->params ['inpath'] = $inPath;
 	}
 	
+	function pageindex($inPath){
+		return $this->render ( 'plugins/index.html', $this->params );
+	}
+	
 	function pageecshop($inPath){
 		//define(DEBUG,1);
 		$url = $this->getUrlParams ( $inPath );
