@@ -118,7 +118,7 @@
 			}
 		});
 		$("#getbarcode").click(function(){
-			$.post("{/$root_dir/}/ajax/getbarcode",{},function(result){
+			$.post("{/get_url rule="/ajax/getbarcode"/}",{},function(result){
 				if(result){
 					$("#goods_sn").val(result.code);
 					$("#img").show();
