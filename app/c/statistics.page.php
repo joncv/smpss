@@ -61,8 +61,8 @@ class c_statistics extends base_c {
 			$start = base_Utils::getStr ( $_POST ['start'] );
 			$end = base_Utils::getStr ( $_POST ['end'] );
 			if ($start) {
-				$condi = "dateymd>={$start}";
-				$condi .= $end ? " and dateymd<={$end}" : " and dateymd<={$ymd}";
+				$condi = "dateymd>='{$start}'";
+				$condi .= $end ? " and dateymd<='{$end}'" : " and dateymd<='{$ymd}'";
 			}
 			$this->params ['title'] = "进货统计";
 			$rs = $purchaseObj->select ( $condi, "dateymd,sum(in_num*in_price) as money", "group by dateymd" )->items;
