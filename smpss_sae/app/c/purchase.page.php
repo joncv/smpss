@@ -46,9 +46,9 @@ class c_purchase extends base_c {
 		$url = $this->getUrlParams ( $inPath );
 		$goods_id = $url ['gid'] ? ( int ) $url ['gid'] : ( int ) $_POST ['goods_id'];
 		$url ['ac'] = $url ['ac'] ? $url ['ac'] : "add";
+		$purchaseObj = new m_purchase ( ( int ) $url ['id'] );
 		switch ($url ['ac']) {
 			case "add" :
-				$purchaseObj = new m_purchase ( ( int ) $url ['id'] );
 				$goodsObj = base_mAPI::get ( "m_goods", $goods_id );
 				if ($_POST) {
 					$goods_sn = base_Utils::getStr ( $_POST ['goods_sn'] );
