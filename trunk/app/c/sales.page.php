@@ -126,12 +126,12 @@ class c_sales extends base_c {
 		$tempsales = new m_tempsales();
 		$info = $tempsales->select("order_id='{$order_id}'")->items;
 		//$info = $_SESSION ['goodsInfo'];
-		if (! is_array ( $info ) or !$info)
-			$this->ShowMsg ( "没有商品！" );
 		$saleObj = new m_sales ();
 		$sales = $mem_rs = array ();
 		$purchaseObj = new m_purchase ();
-		if ($info) {
+		if (is_array ( $info )) {
+			$url['ac']='';
+			$dateline = time();
 			$goodsObj = new m_goods ();
 			$cardid = base_Utils::getStr ( $_POST ['cardid'] );
 			if ($cardid) {
@@ -144,6 +144,8 @@ class c_sales extends base_c {
 				$sales ['realname'] = $mem_rs ['realname'];
 			}
 			//$order_id = date ( "mdHis", time () ) . base_Utils::random ( 4, 1 );
+			$mem_amount = 0;
+			$pro_amount = 0;
 			foreach ( $info as $k => $v ) {
 				$out_amount += sprintf ( "%01.2f", $v ['out_price'] * $v ['num'] ); //总价
 				$pro_amount += sprintf ( "%01.2f", $v ['p_discount'] * $v ['num'] ); //促销优惠的总价
@@ -171,26 +173,68 @@ class c_sales extends base_c {
 				$purchaseObj->outStock ( $sales ['goods_id'], $v ['num'], sprintf ( "%01.2f", $sales ['price'] * $v ['num'] ) );
 			}
 			//计算应收金额
-			if ($mem_amount > 0) {
-				$real_amount = $out_amount - $mem_amount;
-			} elseif ($pro_amount > 0) {
-				$real_amount = $out_amount - $pro_amount;
-			} else {
-				$real_amount = $out_amount;
-			}
+			$real_amount = $out_amount-$mem_amount-$pro_amount;
 			if ($sales ['mid']) {
 				$memberObj->setCredit ( $sales ['mid'] );
 			}
+			$tempsales->delOrder($order_id);//清除临时销售记录
 		}
-		$this->params ['goods'] = $saleObj->select ( "order_id={$order_id}" )->items;
+		$goods = $saleObj->select ( "order_id={$order_id}" )->items;
+		if($url['ac']=='p'){//独立打印
+			if(!is_array($goods)){
+				$this->ShowMsg ( "订单中没有任何商品！" );
+			}
+			foreach ( $goods as $k => $v ) {
+				$out_amount += sprintf ( "%01.2f", $v ['out_price'] * $v ['num'] ); //应收金额
+				$pro_amount += sprintf ( "%01.2f", $v ['p_discount'] * $v ['num'] ); //促销优惠的总价
+				$mem_amount += sprintf ( "%01.2f", $v ['m_discount'] * $v ['num'] ); //会员优惠的总价
+				$real_amount += sprintf ( "%01.2f", $v ['price'] * $v ['num'] ); //实收金额 减去会员优惠和促销优惠
+				$dateline = $v['dateline'];
+			}
+		}
+		$this->params ['goods'] = $goods;
 		$this->params ['order_id'] = $order_id;
 		$this->params ['out_amount'] = $out_amount;
 		$this->params ['real_amount'] = $real_amount;
 		$this->params ['pro_amount'] = $pro_amount;
 		$this->params ['mem_amount'] = $mem_amount;
-		$tempsales->delOrder($order_id);//清除临时销售记录
+		$this->params ['dateline'] = $dateline;
 		$_SESSION ['order_id'] = "";
 		return $this->render ( 'sales/out.html', $this->params );
+	}
+	/**
+	 * 打印小票
+	 * @param array $inPath
+	 */
+	function pageprint($inPath){
+		$url = $this->getUrlParams ( $inPath );
+		$page = $url ['page'] ? ( int ) $url ['page'] : 1;
+		$ymd = date ( "Y-m-d", time () );
+		$condi = '';
+		if ($_POST) {
+			$key = base_Utils::getStr ( $_POST ['key'] );
+			$stime = base_Utils::getStr ( $_POST ['stime'] );
+			$etime = base_Utils::getStr ( $_POST ['etime'] );
+			if ($key) {
+				$condi = "order_id ='{$key}' or goods_name like '%{$key}%' or realname like '%{$key}%' or membercardid ='{$key}'";
+			}
+			if ($stime) {
+				$etime = $etime ? $etime : $ymd;
+				$condi = $condi ? $condi . " and" : "";
+				$condi .= " dateymd between '{$stime}' and '{$etime}'";
+			}
+		}
+		$saleObj = new m_sales ();
+		$saleObj->setCount ( true );
+		$saleObj->setPage ( $page );
+		$saleObj->setLimit ( base_Constant::PAGE_SIZE );
+		$rs = $saleObj->select ( $condi, "order_id,sum(price*num) as allprice,dateymd,sum(p_discount+m_discount) as discount,sum(refund_amount) as refund", "group by order_id", "order by sid desc" );
+		$this->params ['sales'] = $rs->items;
+		$this->params ['key'] = $key;
+		$this->params ['stime'] = $stime;
+		$this->params ['etime'] = $etime;
+		$this->params ['pagebar'] = $this->PageBar ( $rs->totalSize, base_Constant::PAGE_SIZE, $page, $inPath );
+		return $this->render ( 'sales/print.html', $this->params );
 	}
 	/**
 	 * 处理退货
