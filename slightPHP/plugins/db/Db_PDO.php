@@ -238,8 +238,11 @@ class Db_PDO extends DbObject{
 
 		//{{{
 		if($this->limit !=0 and $this->count==true and $this->countsql!=""){
-			$result_count = $this->query($this->countsql,$bind);
-			$data->totalSize = $result_count[0]['totalSize'];
+			$result_count = (array)$this->query($this->countsql,$bind);
+			foreach ($result_count as $c){
+				$data->totalSize += $c['totalSize'];
+			}
+			print_r($result_count);
 			$data->totalPage = ceil($data->totalSize/$data->limit);
 		}
 		//}}}
