@@ -144,6 +144,8 @@ class c_sales extends base_c {
 				$sales ['realname'] = $mem_rs ['realname'];
 			}
 			//$order_id = date ( "mdHis", time () ) . base_Utils::random ( 4, 1 );
+			$mem_amount = 0;
+			$pro_amount = 0;
 			foreach ( $info as $k => $v ) {
 				$out_amount += sprintf ( "%01.2f", $v ['out_price'] * $v ['num'] ); //总价
 				$pro_amount += sprintf ( "%01.2f", $v ['p_discount'] * $v ['num'] ); //促销优惠的总价
@@ -171,13 +173,7 @@ class c_sales extends base_c {
 				$purchaseObj->outStock ( $sales ['goods_id'], $v ['num'], sprintf ( "%01.2f", $sales ['price'] * $v ['num'] ) );
 			}
 			//计算应收金额
-			if ($mem_amount > 0) {
-				$real_amount = $out_amount - $mem_amount;
-			} elseif ($pro_amount > 0) {
-				$real_amount = $out_amount - $pro_amount;
-			} else {
-				$real_amount = $out_amount;
-			}
+			$real_amount = $out_amount - $mem_amount - $pro_amount;
 			if ($sales ['mid']) {
 				$memberObj->setCredit ( $sales ['mid'] );
 			}
