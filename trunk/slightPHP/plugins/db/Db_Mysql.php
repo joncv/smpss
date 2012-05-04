@@ -346,8 +346,10 @@ class Db_Mysql extends DbObject{
 		if($this->limit !=0 and $this->count==true and $countsql!=""){
 			$result = $this->execute($countsql);
 			if($result){
-				$row = mysql_fetch_array($result,MYSQL_NUM );
-				$data->totalSize = $row[0];
+				$data->totalSize = 0;
+				while($row=mysql_fetch_array($result,MYSQL_ASSOC)){
+					$data->totalSize += $row['totalSize'];
+				}
 			}
 			$data->totalPage = ceil($data->totalSize/$data->limit);
 		}
