@@ -48,7 +48,7 @@ class base_Utils {
 				$string [$key] = self::shtmlspecialchars ( $val );
 			}
 		} else {
-			$string = self::getStr ( $string, 'html' );
+			$string = self::getStr ( $string, 'string' );
 		}
 		return $string;
 	}
