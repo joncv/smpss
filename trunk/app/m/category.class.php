@@ -54,4 +54,26 @@ class m_category extends base_m {
 		$this->setError ( 0, "保存数据失败" . $this->getError () );
 		return false;
 	}
+	
+	function isErrorPid($pid, $cat_id){
+		$rs = $this->selectOne("cat_id='{$pid}'", "pid");
+		if($rs['pid'] == 0){
+			return true;
+		}
+		if($rs['pid'] == $cat_id){
+			return false;
+		}else{
+			return $this->isErrorPid($rs['pid'], $cat_id);
+		}
+	}
+	
+	function isHasPid($pid){
+		if($pid > 0){
+			$rs = $this->selectOne("cat_id='{$pid}'", "cat_id");
+			if(empty($rs['cat_id'])){
+				return false;
+			}
+		}
+		return true;
+	}
 }
