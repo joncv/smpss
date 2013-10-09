@@ -121,17 +121,17 @@ class c_sales extends base_c {
 	
 	function pageOut($inPath) {
 		$url = $this->getUrlParams ( $inPath );
-		$order_id = $url['oid'];
+		$order_id = (int)$url['oid'];
 		session_start ();
 		$tempsales = new m_tempsales();
 		$info = $tempsales->select("order_id='{$order_id}'")->items;
 		//$info = $_SESSION ['goodsInfo'];
-		if (! is_array ( $info ) or !$info)
-			$this->ShowMsg ( "没有商品！" );
 		$saleObj = new m_sales ();
 		$sales = $mem_rs = array ();
 		$purchaseObj = new m_purchase ();
-		if ($info) {
+		if (is_array ( $info )) {
+			$url['ac']='';
+			$dateline = time();
 			$goodsObj = new m_goods ();
 			$cardid = base_Utils::getStr ( $_POST ['cardid'] );
 			if ($cardid) {
@@ -173,20 +173,68 @@ class c_sales extends base_c {
 				$purchaseObj->outStock ( $sales ['goods_id'], $v ['num'], sprintf ( "%01.2f", $sales ['price'] * $v ['num'] ) );
 			}
 			//计算应收金额
-			$real_amount = $out_amount - $mem_amount - $pro_amount;
+			$real_amount = $out_amount-$mem_amount-$pro_amount;
 			if ($sales ['mid']) {
 				$memberObj->setCredit ( $sales ['mid'] );
 			}
+			$tempsales->delOrder($order_id);//清除临时销售记录
 		}
-		$this->params ['goods'] = $saleObj->select ( "order_id={$order_id}" )->items;
+		$goods = $saleObj->select ( "order_id={$order_id}" )->items;
+		if($url['ac']=='p'){//独立打印
+			if(!is_array($goods)){
+				$this->ShowMsg ( "订单中没有任何商品！" );
+			}
+			foreach ( $goods as $k => $v ) {
+				$out_amount += sprintf ( "%01.2f", $v ['out_price'] * $v ['num'] ); //应收金额
+				$pro_amount += sprintf ( "%01.2f", $v ['p_discount'] * $v ['num'] ); //促销优惠的总价
+				$mem_amount += sprintf ( "%01.2f", $v ['m_discount'] * $v ['num'] ); //会员优惠的总价
+				$real_amount += sprintf ( "%01.2f", $v ['price'] * $v ['num'] ); //实收金额 减去会员优惠和促销优惠
+				$dateline = $v['dateline'];
+			}
+		}
+		$this->params ['goods'] = $goods;
 		$this->params ['order_id'] = $order_id;
 		$this->params ['out_amount'] = $out_amount;
 		$this->params ['real_amount'] = $real_amount;
 		$this->params ['pro_amount'] = $pro_amount;
 		$this->params ['mem_amount'] = $mem_amount;
-		$tempsales->delOrder($order_id);//清除临时销售记录
+		$this->params ['dateline'] = $dateline;
 		$_SESSION ['order_id'] = "";
 		return $this->render ( 'sales/out.html', $this->params );
+	}
+	/**
+	 * 打印小票
+	 * @param array $inPath
+	 */
+	function pageprint($inPath){
+		$url = $this->getUrlParams ( $inPath );
+		$page = $url ['page'] ? ( int ) $url ['page'] : 1;
+		$ymd = date ( "Y-m-d", time () );
+		$condi = '';
+		if ($_POST) {
+			$key = base_Utils::getStr ( $_POST ['key'] );
+			$stime = base_Utils::getStr ( $_POST ['stime'] );
+			$etime = base_Utils::getStr ( $_POST ['etime'] );
+			if ($key) {
+				$condi = "order_id ='{$key}' or goods_name like '%{$key}%' or realname like '%{$key}%' or membercardid ='{$key}'";
+			}
+			if ($stime) {
+				$etime = $etime ? $etime : $ymd;
+				$condi = $condi ? $condi . " and" : "";
+				$condi .= " dateymd between '{$stime}' and '{$etime}'";
+			}
+		}
+		$saleObj = new m_sales ();
+		$saleObj->setCount ( true );
+		$saleObj->setPage ( $page );
+		$saleObj->setLimit ( base_Constant::PAGE_SIZE );
+		$rs = $saleObj->select ( $condi, "order_id,sum(price*num) as allprice,dateymd,sum(p_discount+m_discount) as discount,sum(refund_amount) as refund", "group by order_id", "order by sid desc" );
+		$this->params ['sales'] = $rs->items;
+		$this->params ['key'] = $key;
+		$this->params ['stime'] = $stime;
+		$this->params ['etime'] = $etime;
+		$this->params ['pagebar'] = $this->PageBar ( $rs->totalSize, base_Constant::PAGE_SIZE, $page, $inPath );
+		return $this->render ( 'sales/print.html', $this->params );
 	}
 	/**
 	 * 处理退货
@@ -195,7 +243,7 @@ class c_sales extends base_c {
 	function pagereturn($inPath) {
 		$url = $this->getUrlParams ( $inPath );
 		if ($_POST) {
-			$order_id = base_Utils::getStr ( $_POST ['order_id'] );
+			$order_id = intval ( $_POST ['order_id'] );
 			$salesObj = new m_sales ();
 			$this->params ['order_id'] = $order_id;
 			if ($_POST ['ac'] == 'del') {
@@ -205,12 +253,13 @@ class c_sales extends base_c {
 				$i = 0;
 				if ($sidArr) {
 					foreach ( $sidArr as $k => $v ) {
-						$rs = $salesObj->selectOne ( "sid={$v} and order_id={$order_id} and refund_type=0", "num,goods_id,goods_name,price,mid" ); //退过款的商品不能够二次退款
+						$v = ( int ) $v;
+						$rs = $salesObj->selectOne ( "sid='{$v}' and order_id='{$order_id}' and refund_type=0", "num,goods_id,goods_name,price,mid" ); //退过款的商品不能够二次退款
 						if (! $rs)
 							$this->ShowMsg ( "该订单中没有该商品！" );
 						$mid = $rs ['mid'];
 						if ($numArr [$k] > 0 and $numArr [$k] <= $rs ['num']) {
-							$returnArr [$i] ['sid'] = ( int ) $v;
+							$returnArr [$i] ['sid'] = $v;
 							$returnArr [$i] ['goods_id'] = $rs ['goods_id'];
 							$returnArr [$i] ['num'] = ( float ) $numArr [$k];
 							$returnArr [$i] ['refund_type'] = 2;
@@ -228,7 +277,7 @@ class c_sales extends base_c {
 				//退货操作 1修改库存 2 修改商品销售总价 3更新会员卡积分
 				foreach ( $returnArr as $v ) {
 					if (! $purchaseObj->backStock ( $v ['goods_id'], $v ['num'], $v ['refund_amount'] )) {
-						$salesObj->update ( "order_id={$order_id} and goods_id = {$v['goods_id']}", "refund_type={$v['refund_type']},refund_amount={$v['refund_amount']},refund_num={$v['num']}" );
+						$salesObj->update ( "order_id='{$order_id}' and goods_id = '{$v['goods_id']}'", "refund_type={$v['refund_type']},refund_amount={$v['refund_amount']},refund_num={$v['num']}" );
 						$this->ShowMsg ( "商品{$v['goods_id']}退款出错" . $purchaseObj->getError () );
 					}
 				}

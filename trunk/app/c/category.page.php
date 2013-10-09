@@ -20,7 +20,7 @@ class c_category extends base_c {
 	
 	function pageindex($inPath) {
 		$url = $this->getUrlParams ( $inPath );
-		$page = $url ['page'] ? $url ['page'] : 1;
+		$page = $url ['page'] ? (int)$url ['page'] : 1;
 		$categoryObj = new m_category ();
 		$this->params ['category'] = $categoryObj->getOrderCate ( '|__' );
 		return $this->render ( 'category/index.html', $this->params );

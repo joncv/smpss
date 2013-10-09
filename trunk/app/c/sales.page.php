@@ -121,7 +121,7 @@ class c_sales extends base_c {
 	
 	function pageOut($inPath) {
 		$url = $this->getUrlParams ( $inPath );
-		$order_id = $url['oid'];
+		$order_id = (int)$url['oid'];
 		session_start ();
 		$tempsales = new m_tempsales();
 		$info = $tempsales->select("order_id='{$order_id}'")->items;
@@ -243,7 +243,7 @@ class c_sales extends base_c {
 	function pagereturn($inPath) {
 		$url = $this->getUrlParams ( $inPath );
 		if ($_POST) {
-			$order_id = base_Utils::getStr ( $_POST ['order_id'] );
+			$order_id = intval ( $_POST ['order_id'] );
 			$salesObj = new m_sales ();
 			$this->params ['order_id'] = $order_id;
 			if ($_POST ['ac'] == 'del') {
@@ -253,12 +253,13 @@ class c_sales extends base_c {
 				$i = 0;
 				if ($sidArr) {
 					foreach ( $sidArr as $k => $v ) {
-						$rs = $salesObj->selectOne ( "sid={$v} and order_id={$order_id} and refund_type=0", "num,goods_id,goods_name,price,mid" ); //退过款的商品不能够二次退款
+						$v = ( int ) $v;
+						$rs = $salesObj->selectOne ( "sid='{$v}' and order_id='{$order_id}' and refund_type=0", "num,goods_id,goods_name,price,mid" ); //退过款的商品不能够二次退款
 						if (! $rs)
 							$this->ShowMsg ( "该订单中没有该商品！" );
 						$mid = $rs ['mid'];
 						if ($numArr [$k] > 0 and $numArr [$k] <= $rs ['num']) {
-							$returnArr [$i] ['sid'] = ( int ) $v;
+							$returnArr [$i] ['sid'] = $v;
 							$returnArr [$i] ['goods_id'] = $rs ['goods_id'];
 							$returnArr [$i] ['num'] = ( float ) $numArr [$k];
 							$returnArr [$i] ['refund_type'] = 2;
@@ -276,7 +277,7 @@ class c_sales extends base_c {
 				//退货操作 1修改库存 2 修改商品销售总价 3更新会员卡积分
 				foreach ( $returnArr as $v ) {
 					if (! $purchaseObj->backStock ( $v ['goods_id'], $v ['num'], $v ['refund_amount'] )) {
-						$salesObj->update ( "order_id={$order_id} and goods_id = {$v['goods_id']}", "refund_type={$v['refund_type']},refund_amount={$v['refund_amount']},refund_num={$v['num']}" );
+						$salesObj->update ( "order_id='{$order_id}' and goods_id = '{$v['goods_id']}'", "refund_type={$v['refund_type']},refund_amount={$v['refund_amount']},refund_num={$v['num']}" );
 						$this->ShowMsg ( "商品{$v['goods_id']}退款出错" . $purchaseObj->getError () );
 					}
 				}
