@@ -20,7 +20,7 @@ class c_category extends base_c {
 	
 	function pageindex($inPath) {
 		$url = $this->getUrlParams ( $inPath );
-		$page = $url ['page'] ? $url ['page'] : 1;
+		$page = $url ['page'] ? (int)$url ['page'] : 1;
 		$categoryObj = new m_category ();
 		$this->params ['category'] = $categoryObj->getOrderCate ( '|__' );
 		return $this->render ( 'category/index.html', $this->params );
@@ -34,11 +34,17 @@ class c_category extends base_c {
 		if ($_POST) {
 			$post = base_Utils::shtmlspecialchars ( $_POST );
 			if ($catid) {
+				if($categoryObj->isErrorPid($post ['pid'], $post ['cat_id']) === false){
+					$this->ShowMsg ( "不能将父分类修改为它的子分类" );
+				}
 				if ($categoryObj->create ( $post )) {
 					$this->ShowMsg ( "修改成功！", $this->createUrl ( "/category/index" ), '', 1 );
 				}
 				$this->ShowMsg ( "修改失败" . $categoryObj->getError () );
 			} else {
+				if($categoryObj->isHasPid($post['pid']) === false){
+					$this->ShowMsg ( "你选择的上级分类不存在" );
+				}
 				if ($categoryObj->create ( $post )) {
 					$this->ShowMsg ( "添加成功！", $this->createUrl ( "/category/index" ), '', 1 );
 				}
